@@ -1,12 +1,17 @@
 <template>
   <div class="home-page">
-    <h1>Welcome Jérémy sur ton projet</h1>
+    <banner />
   </div>
 </template>
 
 <script>
+import Banner from '../components/Banner'
+
 export default {
-  name: 'Home'
+  name: 'Home',
+  components: {
+    Banner
+  }
 }
 
 </script>
@@ -14,7 +19,7 @@ export default {
 <style>
 
 .home-page {
-  background-color: red;
+
 }
 
 </style>
