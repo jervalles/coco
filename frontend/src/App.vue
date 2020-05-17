@@ -1,11 +1,13 @@
 <template>
   <div id="app">
+    <v-app>
       <div id="main">
         <router-view />
       </div>
       <div id="desktop">
         Cette application est disponible qu'en version mobile :)
       </div>
+    </v-app>
   </div>
 </template>
 
@@ -39,10 +41,7 @@ export default {
   #p3 {
     margin: 20px;
   }
-  span {
-    margin: 100px;
-    background-color: yellow;
-  }
+
   #p6 {
     margin-top: 40px;
     margin-right: 40px;

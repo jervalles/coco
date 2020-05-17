@@ -15,9 +15,9 @@ export default {
 <style lang="scss">
 
 .items-list {
-  background-color: rgb(221, 221, 221);
+  background-color:rgb(240, 240, 240);
   border-radius: 2px;
-  width: 72%;
+  width: calc(100% - 140px);
 }
 
 </style>
