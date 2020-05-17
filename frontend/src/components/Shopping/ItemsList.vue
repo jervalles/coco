@@ -1,13 +1,24 @@
 <template>
   <div class="items-list">
-    items list
+    <div v-for="(item, i) in items"
+      :key="i"
+    >
+      <div v-if="item.category === selectedCategory">
+        {{ item.name }}
+      </div>
+    </div>
+    
   </div>
 </template>
 
 <script>
 
 export default {
-  name: 'ItemsList'
+  name: 'ItemsList',
+  props: {
+    items: Array,
+    selectedCategory: Number
+  }
 }
 
 </script>
