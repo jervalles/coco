@@ -1,16 +1,19 @@
 <template>
   <div class="home-page">
     <banner />
+    <shopping />
   </div>
 </template>
 
 <script>
 import Banner from '../components/Banner'
+import Shopping from '../components/Shopping/Shopping.vue'
 
 export default {
   name: 'Home',
   components: {
-    Banner
+    Banner,
+    Shopping
   }
 }
 
@@ -19,7 +22,7 @@ export default {
 <style>
 
 .home-page {
-
+  height: 100vh;
 }
 
 </style>

@@ -26,10 +26,11 @@ export default {
 }
 
 @media only screen and (max-width: 600px) {
+
   body, p {
-  margin: 0px;
-  padding: 0px
-}
+    margin: 0px;
+    padding: 0px
+  }
 
   p {
     background-color: lightBlue;
