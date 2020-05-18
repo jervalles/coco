@@ -4,7 +4,10 @@
       :key="i"
     >
       <div v-if="item.category === selectedCategory">
-        {{ item.name }}
+        {{ item.name }} / {{ item.price}}€
+        <v-btn rounded @click="addItem(i)">+</v-btn>
+        <v-btn rounded @click="removeItem(i)">-</v-btn>
+        <div>{{ item.added }}</div>
       </div>
     </div>
     
@@ -15,9 +18,22 @@
 
 export default {
   name: 'ItemsList',
+  data() {
+    return {
+      selectedItem: []
+    }
+  },
   props: {
     items: Array,
     selectedCategory: Number
+  },
+  methods: {
+    addItem(i) {
+      this.$emit('addItem', i)
+    },
+    removeItem(i) {
+      this.$emit('removeItem', i)
+    }
   }
 }
 
