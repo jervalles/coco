@@ -18,7 +18,7 @@ export default {
 
 .banner {
   display: flex;
-  position: absolute;
+  // position: absolute;
   justify-content: center;
   .banner-img {
   width: 100%;
@@ -29,7 +29,7 @@ export default {
   .logo {
     position: absolute;
     height: 30vw;
-    top: 64%;
+    top: 14%;
     border-radius: 20px;
     border-color: wheat;
   }
