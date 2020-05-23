@@ -1,9 +1,33 @@
 <template>
 	<div id="items-card">
-		<div class="image-container">
+
+		<v-dialog
+			v-model="descriptionModal">
+			<v-card>
+				<div class="close-modal">
+					<v-btn 
+						icon @click="descriptionModal = false">
+						<v-icon>close</v-icon>
+					</v-btn>
+				</div>
+				<v-card-title>{{ itemName }}</v-card-title>
+				<v-card-text>
+					{{ item.description}}
+				</v-card-text>
+				<div class="modal-image-container">
+					<img class="modal-item-image" 
+						:src="require(`../../assets/items/${item.image}`)" 
+						alt="Bubble Tea Picture" 
+					/>
+				</div>
+			</v-card>
+		</v-dialog>
+		<div class="image-container"
+		@click="descriptionModal = !descriptionModal">
 			<img class="item-image" 
 				:src="require(`../../assets/items/${item.image}`)" 
-				alt="Bubble Tea Picture" />
+				alt="Bubble Tea Picture" 
+			/>
 		</div>
 		<div class="item-details">
 			<span class="item-title">
@@ -42,6 +66,7 @@ export default {
   name: 'ItemsCard',
 	data() {
 		return {
+			descriptionModal: false
 		}
 	},
 	props: {
@@ -65,7 +90,22 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+
+.close-modal{
+	display: flex;
+	justify-content: flex-end;
+}
+.modal-image-container {
+	display: flex;
+	justify-content: center;
+	.modal-item-image {
+	width: 280px;
+	height: 280px;
+	margin-bottom: 20px;
+	}
+}
+
 
 #items-card {
 	display: flex;
