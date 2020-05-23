@@ -3,21 +3,25 @@
     <div v-for="(item, i) in items"
       :key="i"
     >
-      <div v-if="item.category === selectedCategory">
-        {{ item.name }} / {{ item.price}}€
-        <v-btn rounded @click="addItem(i)">+</v-btn>
-        <v-btn rounded @click="removeItem(i)">-</v-btn>
-        <div>{{ item.added }}</div>
-      </div>
+      <items-card 
+        v-if="item.category === selectedCategory"
+        :item="item"
+        :index="i"
+        @addItem="addItem($event)"
+        @removeItem="removeItem($event)"
+      />
     </div>
-    
   </div>
 </template>
 
 <script>
+import ItemsCard from './ItemsCard'
 
 export default {
   name: 'ItemsList',
+  components: {
+    ItemsCard
+  },
   data() {
     return {
       selectedItem: []
