@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="shopping-container">
     <div class="shopping">
       <category-list 
         :categories="categories" 
@@ -43,43 +43,57 @@ export default {
             name: 'Le classique',
             category: 1,
             price: 5,
-            added: 0
+            added: 0,
+            description: 'Thé Jasmin sucré au lait avec ses perles tendres !',
+            image: 'classic-tea.jpg'
           },
           {
             name: 'Le fresh juice',
             category: 1,
             price: 4,
-            added: 0
+            added: 0,
+            description: 'Boisson fraiche aux fruits exotiques !',
+            image: 'classic-tea.jpg'
           },
           {
-            name: 'nom3',
+            name: 'Le Panplemous',
             category: 2,
             price: 4,
-            added: 0
+            added: 0,
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
+            image: 'panplemous-tea.jpg'
           },
           {
-            name: 'nom4',
+            name: 'Fruits de la Passion',
             category: 3,
             price: 5.50,
-            added: 0
+            added: 0,
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
+            image: 'passion-tea.jpg'
           },
           {
             name: 'nom5',
             category: 4,
             price: 5,
-            added: 0
+            added: 0,
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
+            image: 'passion-tea.jpg'
           },
           {
             name: 'nom6',
             category: 5,
             price: 5,
-            added: 0
+            added: 0,
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
+            image: 'passion-tea.jpg'
           },
           {
             name: 'nom7',
             category: 5,
             price: 7,
-            added: 0
+            added: 0,
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
+            image: 'passion-tea.jpg'
           },
         ]
       }
@@ -112,15 +126,17 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
+.shopping-container {
   position: absolute;
-  top: 440px;
+  top: 450px;
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
   .shopping {
     position: relative;
     justify-content: center;
     width: 100%;
     height: auto;
-    
     display: flex;
     flex-direction: row;
     justify-content: space-between;

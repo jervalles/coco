@@ -1,5 +1,5 @@
 <template>
-  <v-list >
+  <v-list id="category-list">
     <v-list-item-group v-model="selectedCategory" color="primary">
       <v-list-item
         v-for="(item, i) in categories"
@@ -7,7 +7,7 @@
         @click="selectCategory(i)"
       >
         <v-list-item-content >
-          <v-list-item-title 
+          <v-list-item-title class="category-text"
             v-text="item.name">
           </v-list-item-title>
         </v-list-item-content>
@@ -31,7 +31,6 @@ export default {
   methods: {
     selectCategory(i) {
       this.$emit('selectCategory', i)
-      
     }
   }
 }
@@ -40,22 +39,11 @@ export default {
 
 <style lang="scss">
 
-// .category-list {
-    
-//     width: 140px;
-//     padding-right: 4px;
-//     border-radius: 4px;
-//   .categoy-cards {
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: center;
-//     background-color: red;
-//     height: 40px;
-//     .category-text {
-
-//     }
-//   }
-// }
+#category-list {
+  width: 110px;
+  .category-text {
+    font-size: 11px;
+  }
+}
 
 </style>
