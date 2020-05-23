@@ -48,7 +48,7 @@ export default {
 .items-list {
   background-color:rgb(240, 240, 240);
   border-radius: 2px;
-  width: calc(100% - 140px);
+  width: calc(100% - 114px);
 }
 
 </style>
