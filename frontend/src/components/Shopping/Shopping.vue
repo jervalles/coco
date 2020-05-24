@@ -1,10 +1,14 @@
 <template>
   <div class="shopping-container">
     <div class="shopping">
-      <category-list 
-        :categories="categories" 
-        @selectCategory="selectCategory($event)" 
-      />
+      <div class="left-menu">
+        <category-list 
+          :categories="categories" 
+          @selectCategory="selectCategory($event)" 
+        />
+        <v-btn x-small @click="loginPage()">Account</v-btn>
+        <v-btn x-small>Panier</v-btn>
+      </div>
       <items-list :items="items" 
         :selectedCategory="selectedCategory"
         @addItem="addItem($event)"
@@ -19,6 +23,7 @@
 <script>
 import CategoryList from './CategoriesList'
 import ItemsList from './ItemsList'
+import Router from '../../router'
 
 export default {
     name: 'Shopping',
@@ -45,6 +50,46 @@ export default {
             price: 5,
             added: 0,
             description: 'Thé Jasmin sucré au lait avec ses perles tendres !',
+            image: 'classic-tea.jpg'
+          },
+          {
+            name: 'Le fresh juice',
+            category: 1,
+            price: 4,
+            added: 0,
+            description: 'Boisson fraiche aux fruits exotiques !',
+            image: 'classic-tea.jpg'
+          },
+          {
+            name: 'Le fresh juice',
+            category: 1,
+            price: 4,
+            added: 0,
+            description: 'Boisson fraiche aux fruits exotiques !',
+            image: 'classic-tea.jpg'
+          },
+          {
+            name: 'Le fresh juice',
+            category: 1,
+            price: 4,
+            added: 0,
+            description: 'Boisson fraiche aux fruits exotiques !',
+            image: 'classic-tea.jpg'
+          },
+          {
+            name: 'Le fresh juice',
+            category: 1,
+            price: 4,
+            added: 0,
+            description: 'Boisson fraiche aux fruits exotiques !',
+            image: 'classic-tea.jpg'
+          },
+          {
+            name: 'Le fresh juice',
+            category: 1,
+            price: 4,
+            added: 0,
+            description: 'Boisson fraiche aux fruits exotiques !',
             image: 'classic-tea.jpg'
           },
           {
@@ -119,6 +164,9 @@ export default {
           this.items[i].added = 0
         }
         this.totalPrice = 0
+      },
+      loginPage() {
+        Router.push({ name: 'login'}).then(() => window.scrollTo(0, 0));
       }
     }
 }
@@ -140,6 +188,9 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    .left-menu {
+      width: 110px;
+    }
   }
 }
 

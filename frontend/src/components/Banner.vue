@@ -2,7 +2,6 @@
   <div class="banner">
     <img class="banner-img" src='../images/banner.jpg'/>
     <img class="logo" src='../images/logo-main.jpg'/>
-    
   </div>
 </template>
 
@@ -29,7 +28,7 @@ export default {
   .logo {
     position: absolute;
     height: 30vw;
-    top: 14%;
+    top: 11%;
     border-radius: 20px;
     border-color: wheat;
   }
