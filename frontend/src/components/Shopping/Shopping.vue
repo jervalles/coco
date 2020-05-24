@@ -6,7 +6,7 @@
           :categories="categories" 
           @selectCategory="selectCategory($event)" 
         />
-        <v-btn x-small :to="{ name: 'account'}">Account</v-btn>
+        <v-btn x-small :to="{ name: 'login'}">Account</v-btn>
         <v-btn x-small>Panier</v-btn>
       </div>
       <items-list :items="items" 
