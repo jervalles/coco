@@ -19,6 +19,7 @@
 			/>
 			<v-btn
 				color="primary" class="btn-log"
+				@click="submitLogin()"
 			>
 				login
 			</v-btn>
@@ -39,6 +40,8 @@
 
 <script>
 import Router from '../router'
+import * as firebase from 'firebase'
+import "firebase/auth"
 
 export default {
 	name: 'LoginForm',
@@ -52,10 +55,18 @@ export default {
 	methods: {
 		register() {
 			Router.push({ name: "register" })
+		},
+		async submitLogin() {
+			try {
+				const user = await firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+				console.log(user)
+				this.$router.replace({ name: "home" })
+			} catch(err) {
+					console.log(err)
+			}
 		}
 	}
 }
-
 
 </script>
 

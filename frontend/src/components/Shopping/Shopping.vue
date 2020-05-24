@@ -6,7 +6,7 @@
           :categories="categories" 
           @selectCategory="selectCategory($event)" 
         />
-        <v-btn x-small :to="{ name: 'login'}">Account</v-btn>
+        <v-btn x-small @click="loginPage()">Account</v-btn>
         <v-btn x-small>Panier</v-btn>
       </div>
       <items-list :items="items" 
@@ -23,6 +23,7 @@
 <script>
 import CategoryList from './CategoriesList'
 import ItemsList from './ItemsList'
+import Router from '../../router'
 
 export default {
     name: 'Shopping',
@@ -163,6 +164,9 @@ export default {
           this.items[i].added = 0
         }
         this.totalPrice = 0
+      },
+      loginPage() {
+        Router.push({ name: 'login'}).then(() => window.scrollTo(0, 0));
       }
     }
 }

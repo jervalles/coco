@@ -19,6 +19,7 @@
 			/>
 			<v-btn
 				color="primary" class="btn-log"
+				@click="submitRegister()"
 			>
 				Créer un compte
 			</v-btn>
@@ -27,7 +28,8 @@
 </template>
 
 <script>
-
+import * as firebase from 'firebase'
+import "firebase/auth"
 
 export default {
 	name: 'RegisterForm',
@@ -39,6 +41,15 @@ export default {
 		}
 	},
 	methods: {
+		async submitRegister() {
+			try {
+				const user = await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+				console.log(user)
+				this.$router.replace({ name: "home" })
+			} catch(err) {
+					console.log(err)
+			}
+		}
 	}
 }
 

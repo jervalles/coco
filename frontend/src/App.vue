@@ -3,6 +3,7 @@
     <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
     <v-app>
       <div id="main">
+        <banner />
         <router-view />
       </div>
       <div id="desktop">
@@ -13,9 +14,13 @@
 </template>
 
 <script>
+import Banner from './components/Banner'
 
 export default {
   name: "App",
+  components: {
+    Banner
+  }
 }
 
 </script>
