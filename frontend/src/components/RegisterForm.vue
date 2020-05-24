@@ -24,12 +24,13 @@
 				Créer un compte
 			</v-btn>
 		</v-form>
+		<span class="status-message" v-if="statusMessage">{{ statusMessage }}</span>
   </div>
 </template>
 
 <script>
-import * as firebase from 'firebase'
-import "firebase/auth"
+
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'RegisterForm',
@@ -37,20 +38,35 @@ export default {
 		return {
 			showPwd: false,
 			email: '',
-			password: ''
+			password: '',
+			statusMessage: ''
 		}
 	},
+	computed: {
+		...mapGetters([
+			'createUserStatus'
+		])
+	},
 	methods: {
+		...mapActions([
+			'createUser'
+		]),
 		async submitRegister() {
-			try {
-				const user = await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-				console.log(user)
-				this.$router.replace({ name: "home" })
-			} catch(err) {
-					console.log(err)
-			}
+			await this.createUser({
+				email: this.email,
+				password: this.password
+			})
 		}
-	}
+	},
+	watch: {
+    createUserStatus: function(status) {
+      if (status.success) {
+        this.$router.replace({ name: "home" })
+      } else if (status.error) {
+					this.statusMessage = 'Un problème est survenu'
+			}
+    }
+  },
 }
 
 
@@ -58,6 +74,8 @@ export default {
 
 <style lang="scss">
 	.register-form {
+		display: flex;
+		flex-direction: column;
 		form {
 			.btn-log {
 			padding: 10px;
@@ -68,6 +86,10 @@ export default {
 				cursor: pointer;
 				padding: 5px;
 			}
+		}
+		.status-message {
+			color: red;
+			align-self: center;
 		}
 	}
 </style>
