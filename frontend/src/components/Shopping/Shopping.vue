@@ -24,6 +24,7 @@
 import CategoryList from './CategoriesList'
 import ItemsList from './ItemsList'
 import Router from '../../router'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'Shopping',
@@ -142,6 +143,14 @@ export default {
           },
         ]
       }
+    },
+    computed: {
+    ...mapGetters([
+      'user'
+    ])
+    },
+    mounted() {
+      console.log(this.user)
     },
     methods: {
       selectCategory(event) {

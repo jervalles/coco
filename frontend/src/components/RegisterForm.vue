@@ -19,6 +19,7 @@
 			/>
 			<v-btn
 				color="primary" class="btn-log"
+				:loading="creationLoading"
 				@click="submitRegister()"
 			>
 				Créer un compte
@@ -39,7 +40,8 @@ export default {
 			showPwd: false,
 			email: '',
 			password: '',
-			statusMessage: ''
+			statusMessage: '',
+			creationLoading: false
 		}
 	},
 	computed: {
@@ -59,14 +61,17 @@ export default {
 		}
 	},
 	watch: {
-    createUserStatus: function(status) {
-      if (status.success) {
-        this.$router.replace({ name: "home" })
-      } else if (status.error) {
+		createUserStatus: function(status) {
+			if (status.pending) {
+					this.creationLoading = true
+			}	else if (status.success) {
+					this.$router.replace({ name: "home" })
+			} else if (status.error) {
 					this.statusMessage = 'Un problème est survenu'
+					this.creationLoading = false
 			}
-    }
-  },
+		}
+	},
 }
 
 

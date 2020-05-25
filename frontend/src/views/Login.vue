@@ -21,8 +21,9 @@
 <script>
 import LoginForm from '../components/LoginForm'
 import Router from '../router'
-import * as firebase from 'firebase'
+// import * as firebase from 'firebase'
 import "firebase/auth"
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -35,24 +36,27 @@ export default {
     }
   },
   mounted() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.isLoggedin = true
-      } else {
-        this.isLoggedin = false
-      }
-    })
+    if (this.user) {
+      this.isLoggedin = true
+    } else {
+      this.isLoggedin = false
+    }
   },
+  computed: {
+		...mapGetters([
+			'user'
+		])
+	},
 	methods: {
+    ...mapActions([
+			'logoutUser'
+		]),
 		backHome() {
 			Router.push({ name: "home" });
     },
     async submitLogout() {
-      try {
-        await firebase.auth().signOut()
-			} catch(err) {
-				console.log(err)
-			}
+      await this.logoutUser()
+      Router.push({ name: "register" });
     }
 	}
 }
