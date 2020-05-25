@@ -20,6 +20,7 @@
 			<v-btn
 				color="primary" class="btn-log"
 				@click="submitLogin()"
+				:loading="loginLoading"
 			>
 				login
 			</v-btn>
@@ -40,8 +41,8 @@
 
 <script>
 import Router from '../router'
-import * as firebase from 'firebase'
 import "firebase/auth"
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'LoginForm',
@@ -49,23 +50,44 @@ export default {
 		return {
 			showPwd: false,
 			email: '',
-			password: ''
+			password: '',
+			loginLoading: false
 		}
 	},
+	computed: {
+		...mapGetters([
+			'loginUserStatus'
+		])
+	},
 	methods: {
+		...mapActions([
+			'loginUser'
+		]),
 		register() {
 			Router.push({ name: "register" })
 		},
 		async submitLogin() {
-			try {
-				const user = await firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-				console.log(user)
-				this.$router.replace({ name: "home" })
-			} catch(err) {
-					console.log(err)
+			await this.loginUser({
+				email: this.email,
+				password: this.password
+			})
+		}
+	},
+	watch: {
+		loginUserStatus: function(status) {
+			if (status.pending) {
+				console.log("loading")
+					this.loginLoading = true
+			}	else if (status.success) {
+				console.log("pass")
+					this.$router.replace({ name: "home" })
+			} else if (status.error) {
+				console.log("not pass")
+					// this.statusMessage = 'Un problème est survenu'
+					this.loginLoading = false
 			}
 		}
-	}
+	},
 }
 
 </script>
