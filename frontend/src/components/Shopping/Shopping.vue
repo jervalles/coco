@@ -1,5 +1,25 @@
 <template>
   <div class="shopping-container">
+
+    <v-dialog v-model="basketIsOpen" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <template v-slot:activator="{ on }">
+          <v-btn color="primary" dark v-on="on">Open Dialog</v-btn>
+        </template>
+        <v-card>
+          <v-toolbar dark color="primary">
+            <v-btn icon dark @click="basketIsOpen = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Settings</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn dark text @click="dialog = false">Save</v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+        </v-card>
+      </v-dialog>
+
+
     <div class="shopping">
       <div class="left-menu">
         <category-list 
@@ -7,7 +27,7 @@
           @selectCategory="selectCategory($event)" 
         />
         <v-btn x-small @click="loginPage()">Account</v-btn>
-        <v-btn x-small>Panier</v-btn>
+        <v-btn x-small @click="basket()">Panier</v-btn>
       </div>
       <items-list :items="items" 
         :selectedCategory="selectedCategory"
@@ -24,7 +44,7 @@
 import CategoryList from './CategoriesList'
 import ItemsList from './ItemsList'
 import Router from '../../router'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'Shopping',
@@ -44,6 +64,7 @@ export default {
         ],
         selectedCategory: 0,
         totalPrice: 0,
+        basketIsOpen: false,
         items: [
           {
             name: 'Le classique',
@@ -151,8 +172,15 @@ export default {
     },
     mounted() {
       console.log(this.user)
+      this.init()
     },
     methods: {
+      ...mapActions([
+			'fetchItems'
+		]),
+      async init() {
+        await this.fetchItems()
+      },
       selectCategory(event) {
         this.selectedCategory = event
       },
@@ -176,6 +204,9 @@ export default {
       },
       loginPage() {
         Router.push({ name: 'login'}).then(() => window.scrollTo(0, 0));
+      },
+      basket() {
+        this.basketIsOpen = true
       }
     }
 }
