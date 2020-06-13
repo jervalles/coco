@@ -10,6 +10,10 @@
             <v-spacer></v-spacer>
           </v-toolbar>
           <div class="basket-cards">
+            <div class="final-price">
+              <span class="sous-total">Sous-total: </span>
+              <span class="total-price">{{ totalPrice }}€</span>
+            </div>
             <div v-for="(item, i) in this.items"
               :key="i"
             >
@@ -21,6 +25,24 @@
                 @removeItem="removeItem($event)"
               />
             </div>
+            <v-btn @click="clear()" 
+              class="clear-basket"
+              color="red" 
+              dark
+              small
+            >
+              <v-icon dark left>mdi-delete</v-icon>
+              Vider le panier
+            </v-btn>
+            <v-btn
+              class="clear-basket"
+              color="green" 
+              dark
+              small
+            >
+              <v-icon dark left>mdi-cart-outline</v-icon>
+              Valider le panier
+            </v-btn>
           </div>
         </v-card>
       </v-dialog>
@@ -39,8 +61,6 @@
         @removeItem="removeItem($event)" 
       />
     </div>
-    Total: {{ totalPrice }}€
-    <v-btn @click="clear()">Clear</v-btn>
   </div>
 </template>
 
@@ -146,6 +166,21 @@ export default {
 
 .basket-cards {
   margin-top: 10px;
+  .final-price {
+    background-color: rgb(212, 226, 247);
+    border-radius: 5px;
+    margin: 6px;
+    .sous-total {
+      margin-left: 4px;
+    }
+    .total-price {
+      color: red;
+      margin-left: 2px;
+    }
+  }
+  .clear-basket {
+    margin-left: 6px;
+  }
 }
 
 
