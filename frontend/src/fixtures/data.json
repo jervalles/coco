@@ -1,0 +1,100 @@
+{
+        "items": {
+                        "0": {
+                        "name": "Le classique",
+                        "category": 1,
+                        "price": 5,
+                        "added": 0,
+                        "description": "Thé Jasmin sucré au lait avec ses perles tendres !",
+                        "image": "classic-tea.jpg"
+                },
+                        "1": {
+                        "name": "Le fresh juice",
+                        "category": 1,
+                        "price": 4,
+                        "added": 0,
+                        "description": "Boisson fraiche aux fruits exotiques !",
+                        "image": "classic-tea.jpg"
+                },
+                        "2":{
+                        "name": "Le fresh juice",
+                        "category": 1,
+                        "price": 4,
+                        "added": 0,
+                        "description": "Boisson fraiche aux fruits exotiques !",
+                        "image": "classic-tea.jpg"
+                },
+                        "3":{
+                        "name": "Le fresh juice",
+                        "category": 1,
+                        "price": 4,
+                        "added": 0,
+                        "description": "Boisson fraiche aux fruits exotiques !",
+                        "image": "classic-tea.jpg"
+                },
+                        "4":{
+                        "name": "Le fresh juice",
+                        "category": 1,
+                        "price": 4,
+                        "added": 0,
+                        "description": "Boisson fraiche aux fruits exotiques !",
+                        "image": "classic-tea.jpg"
+                },
+                        "5":{
+                        "name": "Le fresh juice",
+                        "category": 1,
+                        "price": 4,
+                        "added": 0,
+                        "description": "Boisson fraiche aux fruits exotiques !",
+                        "image": "classic-tea.jpg"
+                },
+                        "6":{
+                        "name": "Le fresh juice",
+                        "category": 1,
+                        "price": 4,
+                        "added": 0,
+                        "description": "Boisson fraiche aux fruits exotiques !",
+                        "image": "classic-tea.jpg"
+                },
+                        "7":{
+                        "name": "Le Panplemous",
+                        "category": 2,
+                        "price": 4,
+                        "added": 0,
+                        "description": "Lorem ipsum dolor sit amet consectetur adipisicing",
+                        "image": "panplemous-tea.jpg"
+                },
+                        "8":{
+                        "name": "Fruits de la Passion",
+                        "category": 3,
+                        "price": 5.50,
+                        "added": 0,
+                        "description": "Lorem ipsum dolor sit amet consectetur adipisicing",
+                        "image": "passion-tea.jpg"
+                },
+                        "9":{
+                        "name": "nom5",
+                        "category": 4,
+                        "price": 5,
+                        "added": 0,
+                        "description": "Lorem ipsum dolor sit amet consectetur adipisicing",
+                        "image": "passion-tea.jpg"
+                },
+                        "10":{
+                        "name": "nom6",
+                        "category": 5,
+                        "price": 5,
+                        "added": 0,
+                        "description": "Lorem ipsum dolor sit amet consectetur adipisicing",
+                        "image": "passion-tea.jpg"
+                },
+                        "11":{
+                        "name": "nom7",
+                        "category": 5,
+                        "price": 7,
+                        "added": 0,
+                        "description": "Lorem ipsum dolor sit amet consectetur adipisicing",
+                        "image": "passion-tea.jpg"
+                }
+        }
+}
