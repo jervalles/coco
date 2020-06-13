@@ -1,6 +1,5 @@
 <template>
   <div class="shopping-container">
-
     <v-dialog v-model="basketIsOpen" fullscreen hide-overlay transition="dialog-bottom-transition">
         <v-card>
           <v-toolbar dark color="primary">
@@ -9,11 +8,22 @@
             </v-btn>
             <v-toolbar-title>Panier</v-toolbar-title>
             <v-spacer></v-spacer>
-          </v-toolbar>content 
+          </v-toolbar>
+          <div class="basket-cards">
+            <div v-for="(item, i) in this.items"
+              :key="i"
+            >
+              <items-card 
+                v-if="item.added > 0"
+                :item="item"
+                :index="i"
+                @addItem="addItem($event)"
+                @removeItem="removeItem($event)"
+              />
+            </div>
+          </div>
         </v-card>
       </v-dialog>
-
-
     <div class="shopping">
       <div class="left-menu">
         <category-list 
@@ -37,6 +47,7 @@
 <script>
 import CategoryList from './CategoriesList'
 import ItemsList from './ItemsList'
+import ItemsCard from './ItemsCard'
 import Router from '../../router'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -44,7 +55,8 @@ export default {
     name: 'Shopping',
     components: {
       CategoryList,
-      ItemsList
+      ItemsList,
+      ItemsCard
     },
     data() {
       return {
@@ -83,6 +95,7 @@ export default {
         this.selectedCategory = event
       },
       addItem(event) {
+        console.log(event)
         this.items[event].added += 1
         this.totalPrice += this.items[event].price
       },
@@ -113,11 +126,10 @@ export default {
 
 <style lang="scss">
 .shopping-container {
-  position: absolute;
-  top: 450px;
+  margin-top: 10px;
   padding: 0px;
-  margin: 0px;
   width: 100%;
+
   .shopping {
     position: relative;
     justify-content: center;
@@ -131,5 +143,10 @@ export default {
     }
   }
 }
+
+.basket-cards {
+  margin-top: 10px;
+}
+
 
 </style>
