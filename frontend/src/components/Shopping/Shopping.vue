@@ -2,20 +2,14 @@
   <div class="shopping-container">
 
     <v-dialog v-model="basketIsOpen" fullscreen hide-overlay transition="dialog-bottom-transition">
-        <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark v-on="on">Open Dialog</v-btn>
-        </template>
         <v-card>
           <v-toolbar dark color="primary">
             <v-btn icon dark @click="basketIsOpen = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-toolbar-title>Settings</v-toolbar-title>
+            <v-toolbar-title>Panier</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-toolbar-items>
-              <v-btn dark text @click="dialog = false">Save</v-btn>
-            </v-toolbar-items>
-          </v-toolbar>
+          </v-toolbar>content 
         </v-card>
       </v-dialog>
 
@@ -55,7 +49,7 @@ export default {
     data() {
       return {
         categories: [
-          { name: 'Tous les Cocos' },
+          { name: 'Categorie 1' },
           { name: 'Categorie 2' },
           { name: 'Categorie 3' },
           { name: 'Categorie 4' },
@@ -64,110 +58,13 @@ export default {
         ],
         selectedCategory: 0,
         totalPrice: 0,
-        basketIsOpen: false,
-        items: [
-          {
-            name: 'Le classique',
-            category: 1,
-            price: 5,
-            added: 0,
-            description: 'Thé Jasmin sucré au lait avec ses perles tendres !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le Panplemous',
-            category: 2,
-            price: 4,
-            added: 0,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
-            image: 'panplemous-tea.jpg'
-          },
-          {
-            name: 'Fruits de la Passion',
-            category: 3,
-            price: 5.50,
-            added: 0,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
-            image: 'passion-tea.jpg'
-          },
-          {
-            name: 'nom5',
-            category: 4,
-            price: 5,
-            added: 0,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
-            image: 'passion-tea.jpg'
-          },
-          {
-            name: 'nom6',
-            category: 5,
-            price: 5,
-            added: 0,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
-            image: 'passion-tea.jpg'
-          },
-          {
-            name: 'nom7',
-            category: 5,
-            price: 7,
-            added: 0,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
-            image: 'passion-tea.jpg'
-          },
-        ]
+        basketIsOpen: false
       }
     },
     computed: {
     ...mapGetters([
-      'user'
+      'user',
+      'items'
     ])
     },
     mounted() {
@@ -180,6 +77,7 @@ export default {
 		]),
       async init() {
         await this.fetchItems()
+        console.log(this.items)
       },
       selectCategory(event) {
         this.selectedCategory = event

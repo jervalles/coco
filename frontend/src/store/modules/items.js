@@ -2,16 +2,14 @@ import * as firebase from 'firebase'
 import "firebase/auth"
 
 const state = {
-
+    
     items: null,
-
 
 }
 
 const mutations= {
-    TEST(state, payload) {
+    FETCH_ITEMS_SUCCESS(state, payload) {
         state.items = payload
-        console.log(state.items)
     }
 }
 
@@ -25,13 +23,16 @@ const actions = {
                 items.push({
                     id: key,
                     name: obj[key].name,
-                    age: obj[key].age
+                    category: obj[key].category,
+                    description: obj[key].description,
+                    image: obj[key].image,
+                    price: obj[key].price,
+                    added: obj[key].added
                 })
-                console.log(key)
             }
             console.log(items)
             
-            commit('TEST'), res.data()
+            commit('FETCH_ITEMS_SUCCESS', items)
         }).catch(err => {
             console.log(err)
         })
