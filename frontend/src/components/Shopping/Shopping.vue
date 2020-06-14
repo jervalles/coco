@@ -44,6 +44,7 @@
               Valider le panier
             </v-btn>
           </div>
+          {{ emptyBasket }}
         </v-card>
       </v-dialog>
     <div class="shopping">
@@ -90,14 +91,23 @@ export default {
         ],
         selectedCategory: 0,
         totalPrice: 0,
-        basketIsOpen: false
+        basketIsOpen: false,
+        basketIsEmpty: true,
       }
     },
     computed: {
-    ...mapGetters([
-      'user',
-      'items'
-    ])
+      ...mapGetters([
+        'user',
+        'items'
+      ]),
+      emptyBasket() {
+        for (let i = 0; i< this.items.length; i++) {
+          if (this.items[i].added > 0) {
+            return
+          }
+        }
+        return "Votre panier est vide"
+      }
     },
     mounted() {
       console.log(this.user)
@@ -109,13 +119,11 @@ export default {
 		]),
       async init() {
         await this.fetchItems()
-        console.log(this.items)
       },
       selectCategory(event) {
         this.selectedCategory = event
       },
       addItem(event) {
-        console.log(event)
         this.items[event].added += 1
         this.totalPrice += this.items[event].price
       },
