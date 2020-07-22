@@ -1,5 +1,89 @@
 <template>
   <div class="shopping-container">
+    <v-dialog
+      v-model="thanksDialog"
+      max-width="320"
+    >
+      <template>
+        <v-card>
+        <v-card-title>CONFIRMATION</v-card-title>
+        <v-card-text>Merci pour votre commande :)</v-card-text>
+        <v-card-actions>
+        </v-card-actions>
+      </v-card>
+      </template> 
+    </v-dialog>
+    <v-dialog v-model="basketIsOpen" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <v-card>
+          <v-dialog
+            v-model="orderDialogAsk"
+            persistent
+            max-width="320"
+          >
+            <template>
+              <v-card>
+              <v-card-title>CONFIRMATION</v-card-title>
+              <v-card-text>Confirmez-vous la commande ?</v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="red" @click="orderDialogAsk = false">ANNULER</v-btn>
+                <v-btn color="primary" @click="confirmOrder">CONFIRMER</v-btn>
+              </v-card-actions>
+            </v-card>
+            </template>  
+          </v-dialog>
+          <v-toolbar dark color="primary">
+            <v-btn icon dark @click="basketIsOpen = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Panier</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+          <div class="basket-cards">
+            <v-alert 
+              v-if="emptyBasketAlert"
+              type="warning"
+              dismissible>
+              Votre panier est vide.
+            </v-alert>
+            <div class="final-price">
+              <span class="sous-total">Sous-total: </span>
+              <span class="total-price">{{ totalPrice }}€</span>
+            </div>
+            <div v-for="(item, i) in this.items"
+              :key="i"
+            >
+              <items-card 
+                v-if="item.added > 0"
+                :item="item"
+                :index="i"
+                @addItem="addItem($event)"
+                @removeItem="removeItem($event)"
+              />
+            </div>
+            <v-btn @click="clear()" 
+              class="clear-basket"
+              color="red" 
+              dark
+              small
+            >
+              <v-icon dark left>mdi-delete</v-icon>
+              Vider le panier
+            </v-btn>
+            <v-btn
+              class="clear-basket"
+              color="green" 
+              dark
+              small
+              @click="order()"
+            >
+              <v-icon dark left>mdi-cart-outline</v-icon>
+              Valider le panier
+            </v-btn>
+          </div>
+          {{ emptyBasket }}
+        </v-card>
+      </v-dialog>
     <div class="shopping">
       <div class="left-menu">
         <category-list 
@@ -7,35 +91,36 @@
           @selectCategory="selectCategory($event)" 
         />
         <v-btn x-small @click="loginPage()">Account</v-btn>
-        <v-btn x-small>Panier</v-btn>
+        <v-btn x-small @click="basket()">Panier</v-btn>
       </div>
       <items-list :items="items" 
         :selectedCategory="selectedCategory"
         @addItem="addItem($event)"
-        @removeItem="removeItem($event)" 
+        @removeItem="removeItem($event)"
+        :loading="loading"
       />
     </div>
-    Total: {{ totalPrice }}€
-    <v-btn @click="clear()">Clear</v-btn>
   </div>
 </template>
 
 <script>
 import CategoryList from './CategoriesList'
 import ItemsList from './ItemsList'
+import ItemsCard from './ItemsCard'
 import Router from '../../router'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'Shopping',
     components: {
       CategoryList,
-      ItemsList
+      ItemsList,
+      ItemsCard
     },
     data() {
       return {
         categories: [
-          { name: 'Tous les Cocos' },
+          { name: 'Categorie 1' },
           { name: 'Categorie 2' },
           { name: 'Categorie 3' },
           { name: 'Categorie 4' },
@@ -44,115 +129,52 @@ export default {
         ],
         selectedCategory: 0,
         totalPrice: 0,
-        items: [
-          {
-            name: 'Le classique',
-            category: 1,
-            price: 5,
-            added: 0,
-            description: 'Thé Jasmin sucré au lait avec ses perles tendres !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le fresh juice',
-            category: 1,
-            price: 4,
-            added: 0,
-            description: 'Boisson fraiche aux fruits exotiques !',
-            image: 'classic-tea.jpg'
-          },
-          {
-            name: 'Le Panplemous',
-            category: 2,
-            price: 4,
-            added: 0,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
-            image: 'panplemous-tea.jpg'
-          },
-          {
-            name: 'Fruits de la Passion',
-            category: 3,
-            price: 5.50,
-            added: 0,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
-            image: 'passion-tea.jpg'
-          },
-          {
-            name: 'nom5',
-            category: 4,
-            price: 5,
-            added: 0,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
-            image: 'passion-tea.jpg'
-          },
-          {
-            name: 'nom6',
-            category: 5,
-            price: 5,
-            added: 0,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
-            image: 'passion-tea.jpg'
-          },
-          {
-            name: 'nom7',
-            category: 5,
-            price: 7,
-            added: 0,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing",
-            image: 'passion-tea.jpg'
-          },
-        ]
+        basketIsOpen: false,
+        basketIsEmpty: true,
+        orderDialogAsk: false,
+        loading: true,
+        emptyBasketAlert: false,
+        thanksDialog: false
+      }
+    },
+     watch: {
+      itemsFetching: function(status){
+        if(status.success){
+          this.loading = false
+        } else if (status.error) {
+          // console.log("NOT OK")
+        }
       }
     },
     computed: {
-    ...mapGetters([
-      'user'
-    ])
+      ...mapGetters([
+        'user',
+        'items',
+        'itemsFetching'
+      ]),
+      emptyBasket() {
+        if (this.items) {
+          for (let i = 0; i < this.items.length; i++) {
+            if (this.items[i].added > 0) {
+              return
+            }
+          }
+        }
+        
+        return "Votre panier est vide"
+      }
     },
     mounted() {
       console.log(this.user)
+      this.init()
     },
     methods: {
+      ...mapActions([
+			'fetchItems'
+		]),
+      async init() {
+        await this.fetchItems()
+      },
       selectCategory(event) {
         this.selectedCategory = event
       },
@@ -174,8 +196,39 @@ export default {
         }
         this.totalPrice = 0
       },
+      order() {
+        const itemsToOrder = []
+        for (let i = 0; i < this.items.length; i++) {
+          if (this.items[i].added > 0) {
+            itemsToOrder.push(this.items[i])
+          }
+        }
+        if (this.emptyBasket) {
+          this.emptyBasketAlert = true
+        } else {
+          console.log(itemsToOrder)
+          this.orderDialog()
+        }
+      },
+      orderDialog() {
+        console.log("itemsToOrder")
+        this.orderDialogAsk = true
+      },
+      confirmOrder() {
+        this.orderDialogAsk = false
+        this.clear()
+        this.basketIsOpen = false
+        this.thanksDialog = true
+        setTimeout(function () {
+          this.thanksDialog = false
+        }.bind(this), 5000);
+      },
       loginPage() {
         Router.push({ name: 'login'}).then(() => window.scrollTo(0, 0));
+      },
+      basket() {
+        this.basketIsOpen = true
+        this.emptyBasketAlert = false
       }
     }
 }
@@ -183,12 +236,11 @@ export default {
 </script>
 
 <style lang="scss">
-.shopping-container {
-  position: absolute;
-  top: 450px;
-  padding: 0px;
-  margin: 0px;
-  width: 100%;
+  .shopping-container {
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
+
   .shopping {
     position: relative;
     justify-content: center;
@@ -202,5 +254,25 @@ export default {
     }
   }
 }
+
+.basket-cards {
+  margin-top: 10px;
+  .final-price {
+    background-color: rgb(212, 226, 247);
+    border-radius: 5px;
+    margin: 6px;
+    .sous-total {
+      margin-left: 4px;
+    }
+    .total-price {
+      color: red;
+      margin-left: 2px;
+    }
+  }
+  .clear-basket {
+    margin-left: 6px;
+  }
+}
+
 
 </style>

@@ -1,5 +1,12 @@
 <template>
   <div class="items-list">
+    <v-progress-circular
+      v-if="loading"
+      id="loading"
+      :size="50"
+      color="primary"
+      indeterminate
+      ></v-progress-circular>
     <div v-for="(item, i) in items"
       :key="i"
     >
@@ -29,7 +36,8 @@ export default {
   },
   props: {
     items: Array,
-    selectedCategory: Number
+    selectedCategory: Number,
+    loading: Boolean
   },
   methods: {
     addItem(i) {
@@ -49,6 +57,11 @@ export default {
   background-color:rgb(240, 240, 240);
   border-radius: 2px;
   width: calc(100% - 114px);
+  display: flex;
+  flex-direction: column;
+  #loading {
+    align-self: center;
+  }
 }
 
 </style>
