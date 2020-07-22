@@ -1,7 +1,37 @@
 <template>
   <div class="shopping-container">
+    <v-dialog
+      v-model="thanksDialog"
+      max-width="320"
+    >
+      <template>
+        <v-card>
+        <v-card-title>CONFIRMATION</v-card-title>
+        <v-card-text>Merci pour votre commande :)</v-card-text>
+        <v-card-actions>
+        </v-card-actions>
+      </v-card>
+      </template> 
+    </v-dialog>
     <v-dialog v-model="basketIsOpen" fullscreen hide-overlay transition="dialog-bottom-transition">
         <v-card>
+          <v-dialog
+            v-model="orderDialogAsk"
+            persistent
+            max-width="320"
+          >
+            <template>
+              <v-card>
+              <v-card-title>CONFIRMATION</v-card-title>
+              <v-card-text>Confirmez-vous la commande ?</v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="red" @click="orderDialogAsk = false">ANNULER</v-btn>
+                <v-btn color="primary" @click="confirmOrder">CONFIRMER</v-btn>
+              </v-card-actions>
+            </v-card>
+            </template>  
+          </v-dialog>
           <v-toolbar dark color="primary">
             <v-btn icon dark @click="basketIsOpen = false">
               <v-icon>mdi-close</v-icon>
@@ -10,6 +40,12 @@
             <v-spacer></v-spacer>
           </v-toolbar>
           <div class="basket-cards">
+            <v-alert 
+              v-if="emptyBasketAlert"
+              type="warning"
+              dismissible>
+              Votre panier est vide.
+            </v-alert>
             <div class="final-price">
               <span class="sous-total">Sous-total: </span>
               <span class="total-price">{{ totalPrice }}€</span>
@@ -95,7 +131,10 @@ export default {
         totalPrice: 0,
         basketIsOpen: false,
         basketIsEmpty: true,
+        orderDialogAsk: false,
         loading: true,
+        emptyBasketAlert: false,
+        thanksDialog: false
       }
     },
      watch: {
@@ -164,17 +203,32 @@ export default {
             itemsToOrder.push(this.items[i])
           }
         }
-        if (itemsToOrder.length === 0) {
-          console.log("panier vide")
+        if (this.emptyBasket) {
+          this.emptyBasketAlert = true
         } else {
           console.log(itemsToOrder)
+          this.orderDialog()
         }
+      },
+      orderDialog() {
+        console.log("itemsToOrder")
+        this.orderDialogAsk = true
+      },
+      confirmOrder() {
+        this.orderDialogAsk = false
+        this.clear()
+        this.basketIsOpen = false
+        this.thanksDialog = true
+        setTimeout(function () {
+          this.thanksDialog = false
+        }.bind(this), 5000);
       },
       loginPage() {
         Router.push({ name: 'login'}).then(() => window.scrollTo(0, 0));
       },
       basket() {
         this.basketIsOpen = true
+        this.emptyBasketAlert = false
       }
     }
 }
@@ -182,10 +236,10 @@ export default {
 </script>
 
 <style lang="scss">
-.shopping-container {
-  margin-top: 10px;
-  padding: 0px;
-  width: 100%;
+  .shopping-container {
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
 
   .shopping {
     position: relative;
