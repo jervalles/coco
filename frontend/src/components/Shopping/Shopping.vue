@@ -134,7 +134,8 @@ export default {
         orderDialogAsk: false,
         loading: true,
         emptyBasketAlert: false,
-        thanksDialog: false
+        thanksDialog: false,
+        itemsToOrder: []
       }
     },
      watch: {
@@ -170,7 +171,8 @@ export default {
     },
     methods: {
       ...mapActions([
-			'fetchItems'
+      'fetchItems',
+      'createOrder'
 		]),
       async init() {
         await this.fetchItems()
@@ -195,26 +197,25 @@ export default {
           this.items[i].added = 0
         }
         this.totalPrice = 0
+        this.itemsToOrder = []
       },
       order() {
-        const itemsToOrder = []
         for (let i = 0; i < this.items.length; i++) {
           if (this.items[i].added > 0) {
-            itemsToOrder.push(this.items[i])
+            this.itemsToOrder.push(this.items[i])
           }
         }
         if (this.emptyBasket) {
           this.emptyBasketAlert = true
         } else {
-          console.log(itemsToOrder)
           this.orderDialog()
         }
       },
       orderDialog() {
-        console.log("itemsToOrder")
         this.orderDialogAsk = true
       },
-      confirmOrder() {
+      async confirmOrder() {
+        await this.createOrder(this.itemsToOrder)
         this.orderDialogAsk = false
         this.clear()
         this.basketIsOpen = false

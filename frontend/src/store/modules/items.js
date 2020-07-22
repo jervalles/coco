@@ -1,5 +1,4 @@
 import * as firebase from 'firebase'
-import "firebase/auth"
 
 const state = {
     items: null,
@@ -46,7 +45,6 @@ const actions = {
                     added: obj[key].added
                 })
             }
-            console.log(items)
             
             commit('FETCH_ITEMS_SUCCESS', items)
         }).catch(err => {
