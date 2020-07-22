@@ -32,12 +32,17 @@ const mutations= {
 const actions = {
 
 	createOrder({ commit }, payload) {
-        const user = "test"
+        let user = ''
+        if (payload.user == null) {
+            user = "nouser"
+        } else {
+            user = payload.user
+        }
 
         commit('POST_ORDER_PENDING')
         firebase.database().ref('orders').push({
             user,
-            items: payload
+            items: payload.order
         })
         .then(() => {
             commit('POST_ORDER_SUCCESS')

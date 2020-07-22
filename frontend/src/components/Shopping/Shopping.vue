@@ -215,7 +215,7 @@ export default {
         this.orderDialogAsk = true
       },
       async confirmOrder() {
-        await this.createOrder(this.itemsToOrder)
+        await this.createOrder({order: this.itemsToOrder, user: this.user})
         this.orderDialogAsk = false
         this.clear()
         this.basketIsOpen = false
