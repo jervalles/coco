@@ -75,10 +75,10 @@ export default {
 	},
 	methods: {
 		addItem() {
-				this.$emit('addItem', this.index)
+			this.$emit('addItem', this.index)
 		},
 		removeItem() {
-		this.$emit('removeItem', this.index)
+			this.$emit('removeItem', this.index)
 		}
 	},
 	computed: {

@@ -59,7 +59,8 @@
       <items-list :items="items" 
         :selectedCategory="selectedCategory"
         @addItem="addItem($event)"
-        @removeItem="removeItem($event)" 
+        @removeItem="removeItem($event)"
+        :loading="loading"
       />
     </div>
   </div>
@@ -93,19 +94,33 @@ export default {
         totalPrice: 0,
         basketIsOpen: false,
         basketIsEmpty: true,
+        loading: true,
+      }
+    },
+     watch: {
+      itemsFetching: function(status){
+        if(status.success){
+          this.loading = false
+        } else if (status.error) {
+          console.log("NOT OK")
+        }
       }
     },
     computed: {
       ...mapGetters([
         'user',
-        'items'
+        'items',
+        'itemsFetching'
       ]),
       emptyBasket() {
-        for (let i = 0; i< this.items.length; i++) {
-          if (this.items[i].added > 0) {
-            return
+        if (this.items) {
+          for (let i = 0; i < this.items.length; i++) {
+            if (this.items[i].added > 0) {
+              return
+            }
           }
         }
+        
         return "Votre panier est vide"
       }
     },

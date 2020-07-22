@@ -2,19 +2,35 @@ import * as firebase from 'firebase'
 import "firebase/auth"
 
 const state = {
-    
     items: null,
-
+    // GET ITEMS STATUS
+    itemsFetchSuccess: false,
+    itemsFetchError: false,
+    itemsFetching: false
 }
 
 const mutations= {
     FETCH_ITEMS_SUCCESS(state, payload) {
         state.items = payload
+        state.itemsFetchSuccess = true
+        state.itemsFetchError = false
+        state.itemsFetching = false
+    },
+    FETCH_ITEMS_ERROR(state) {
+        state.itemsFetchSuccess = false
+        state.itemsFetchError = true
+        state.itemsFetching = false
+    },
+    FETCH_ITEMS_PENDING(state) {
+        state.itemsFetching = true
+        state.itemsFetchSuccess = false
+        state.itemsFetchError = true
     }
 }
 
 const actions = {
     fetchItems({ commit }) {
+        commit('FETCH_ITEMS_PENDING')
         firebase.database().ref('items').once('value')
         .then(res => {
             const items = []
@@ -35,15 +51,22 @@ const actions = {
             commit('FETCH_ITEMS_SUCCESS', items)
         }).catch(err => {
             console.log(err)
+            commit('FETCH_ITEMS_ERROR')
         })
     }
 }
 
 const getters = {
-
 	items(state) {
 		return state.items
-	},
+    },
+    itemsFetching: state => {
+        return {
+          pending: state.itemsFetching,
+          success: state.itemsFetchSuccess,
+          error: state.itemsFetchError
+        }
+      },
 }
 
 const itemsModule = {
