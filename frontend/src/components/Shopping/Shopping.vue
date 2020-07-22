@@ -39,6 +39,7 @@
               color="green" 
               dark
               small
+              @click="order()"
             >
               <v-icon dark left>mdi-cart-outline</v-icon>
               Valider le panier
@@ -102,7 +103,7 @@ export default {
         if(status.success){
           this.loading = false
         } else if (status.error) {
-          console.log("NOT OK")
+          // console.log("NOT OK")
         }
       }
     },
@@ -155,6 +156,19 @@ export default {
           this.items[i].added = 0
         }
         this.totalPrice = 0
+      },
+      order() {
+        const itemsToOrder = []
+        for (let i = 0; i < this.items.length; i++) {
+          if (this.items[i].added > 0) {
+            itemsToOrder.push(this.items[i])
+          }
+        }
+        if (itemsToOrder.length === 0) {
+          console.log("panier vide")
+        } else {
+          console.log(itemsToOrder)
+        }
       },
       loginPage() {
         Router.push({ name: 'login'}).then(() => window.scrollTo(0, 0));
