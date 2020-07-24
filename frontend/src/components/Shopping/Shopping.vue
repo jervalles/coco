@@ -24,6 +24,12 @@
               <v-card>
               <v-card-title>CONFIRMATION</v-card-title>
               <v-card-text>Confirmez-vous la commande ?</v-card-text>
+              <v-alert 
+                v-if="errorOrderBdd"
+                type="warning"
+                dismissible>
+                Un problème est survenu. Etes-vous connecté ?
+            </v-alert>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="red" @click="orderDialogAsk = false">ANNULER</v-btn>
@@ -135,15 +141,23 @@ export default {
         loading: true,
         emptyBasketAlert: false,
         thanksDialog: false,
-        itemsToOrder: []
+        itemsToOrder: [],
+        errorOrderBdd: false
       }
     },
      watch: {
       itemsFetching: function(status){
-        if(status.success){
+        if (status.success) {
           this.loading = false
         } else if (status.error) {
           // console.log("NOT OK")
+        }
+      },
+      createOrderError(status) {
+        if (status.error) {
+          this.errorOrderBdd = true
+        } else if (status.success) {
+          this.orderSucess()
         }
       }
     },
@@ -151,7 +165,8 @@ export default {
       ...mapGetters([
         'user',
         'items',
-        'itemsFetching'
+        'itemsFetching',
+        'createOrderError'
       ]),
       emptyBasket() {
         if (this.items) {
@@ -216,6 +231,8 @@ export default {
       },
       async confirmOrder() {
         await this.createOrder({order: this.itemsToOrder, user: this.user})
+      },
+      orderSucess() {
         this.orderDialogAsk = false
         this.clear()
         this.basketIsOpen = false

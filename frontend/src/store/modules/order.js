@@ -38,24 +38,34 @@ const actions = {
         } else {
             user = payload.user
         }
-
         commit('POST_ORDER_PENDING')
-        firebase.database().ref('orders').push({
-            user,
-            items: payload.order
-        })
-        .then(() => {
-            commit('POST_ORDER_SUCCESS')
-        })
-        .catch((err) => {
-            commit('POST_ORDER_ERROR')
-            console.log(err)
+        
+        return new Promise((resolve) => {
+            firebase.database().ref('orders').push({
+                user,
+                items: payload.order
+            })
+                .then(() => {
+                    commit('POST_ORDER_SUCCESS')
+                    resolve()
+                })
+                .catch((err) => {
+                    console.log(err)
+                    commit('POST_ORDER_ERROR')
+                })
         })
     }
 }
 
 const getters = {
-    // To use if wanna add errors/success messages in view
+
+    createOrderError: state => {
+		return {
+            pending: state.createOrderPending,
+            success: state.createOrderSuccess,
+            error: state.createOrderError
+        }
+    },
 }
 
 const orderModule = {
