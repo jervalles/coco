@@ -24,6 +24,12 @@
               <v-card>
               <v-card-title>CONFIRMATION</v-card-title>
               <v-card-text>Confirmez-vous la commande ?</v-card-text>
+              <v-alert 
+                v-if="errorOrderBdd"
+                type="warning"
+                dismissible>
+                Un problème est survenu. Etes-vous connecté ?
+            </v-alert>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="red" @click="orderDialogAsk = false">ANNULER</v-btn>
@@ -134,15 +140,24 @@ export default {
         orderDialogAsk: false,
         loading: true,
         emptyBasketAlert: false,
-        thanksDialog: false
+        thanksDialog: false,
+        itemsToOrder: [],
+        errorOrderBdd: false
       }
     },
      watch: {
       itemsFetching: function(status){
-        if(status.success){
+        if (status.success) {
           this.loading = false
         } else if (status.error) {
           // console.log("NOT OK")
+        }
+      },
+      createOrderError(status) {
+        if (status.error) {
+          this.errorOrderBdd = true
+        } else if (status.success) {
+          this.orderSucess()
         }
       }
     },
@@ -150,7 +165,8 @@ export default {
       ...mapGetters([
         'user',
         'items',
-        'itemsFetching'
+        'itemsFetching',
+        'createOrderError'
       ]),
       emptyBasket() {
         if (this.items) {
@@ -170,7 +186,8 @@ export default {
     },
     methods: {
       ...mapActions([
-			'fetchItems'
+      'fetchItems',
+      'createOrder'
 		]),
       async init() {
         await this.fetchItems()
@@ -195,26 +212,27 @@ export default {
           this.items[i].added = 0
         }
         this.totalPrice = 0
+        this.itemsToOrder = []
       },
       order() {
-        const itemsToOrder = []
         for (let i = 0; i < this.items.length; i++) {
           if (this.items[i].added > 0) {
-            itemsToOrder.push(this.items[i])
+            this.itemsToOrder.push(this.items[i])
           }
         }
         if (this.emptyBasket) {
           this.emptyBasketAlert = true
         } else {
-          console.log(itemsToOrder)
           this.orderDialog()
         }
       },
       orderDialog() {
-        console.log("itemsToOrder")
         this.orderDialogAsk = true
       },
-      confirmOrder() {
+      async confirmOrder() {
+        await this.createOrder({order: this.itemsToOrder, user: this.user})
+      },
+      orderSucess() {
         this.orderDialogAsk = false
         this.clear()
         this.basketIsOpen = false
