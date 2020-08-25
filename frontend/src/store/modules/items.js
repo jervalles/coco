@@ -42,7 +42,7 @@ const actions = {
                     description: obj[key].description,
                     image: obj[key].image,
                     price: obj[key].price,
-                    added: obj[key].added
+                    added: 0
                 })
             }
             
