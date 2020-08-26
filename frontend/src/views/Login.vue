@@ -35,6 +35,7 @@ export default {
       isLoggedin: false,
     }
   },
+
   mounted() {
     if (this.user) {
       this.isLoggedin = true
@@ -44,9 +45,10 @@ export default {
   },
   computed: {
 		...mapGetters([
-			'user'
+      'user'
 		])
-	},
+  },
+  
 	methods: {
     ...mapActions([
 			'logoutUser'
