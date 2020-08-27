@@ -2,7 +2,8 @@ require("dotenv").config();
 const mysql = require("mysql")
 
 let CONFIG = {
-    backendPort: process.env.BACKEND_PORT || "8080"
+    backendPort: process.env.BACKEND_PORT || "8080",
+    jwtSecret: process.env.JWT_SECRET || "jwt_please_change"
 }
 
 const db = mysql.createPool({

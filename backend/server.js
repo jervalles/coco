@@ -1,20 +1,45 @@
 const mysql = require('mysql')
 const express = require("express")
 const app = express()
+const jwt = require("jsonwebtoken")
 
 const {
-    CONFIG: { backendPort },
+    CONFIG: { jwtSecret, backendPort },
     db,
 } = require("./conf")
 
-    const bodyParser = require("body-parser")
+const bcrypt = require("bcrypt")
 
-    app.use(bodyParser.json());
-    app.use(
-        bodyParser.urlencoded({
-            extended: true
-        })
-    )
+const bodyParser = require("body-parser")
+
+app.use(bodyParser.json())
+app.use(
+    bodyParser.urlencoded({
+        extended: true
+    })
+)
+
+// USER REGISTRATION || POST
+app.post("/signup", async (req, res, next) => {
+    const formData = req.body
+    
+    bcrypt.hash(formData.password, 10, (err, hash) => {
+        formData.password = hash
+        const newUser = formData
+          db.query("INSERT INTO user SET ?", [newUser], (err, results) => {
+            if (err) {
+              return res.status(400).send(err.sqlMessage)
+            }
+            newUser.password = undefined
+            newUser.id = results.insertId
+            return res.status(201).send({
+              user: newUser,
+              token: jwt.sign(JSON.stringify(newUser), jwtSecret)
+            })
+          })
+    })
+})
+
 
 // TEST || GET
 app.get("/api/", (req, res) => {
