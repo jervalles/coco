@@ -1,19 +1,39 @@
-const express = require('express')
+const mysql = require('mysql')
+const express = require("express")
 const app = express()
-var admin = require("firebase-admin");
 
-var serviceAccount = require("./coco-248ba-firebase-adminsdk-fdiij-a81367e9c4.json");
+const {
+    CONFIG: { backendPort },
+    db,
+} = require("./conf")
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://coco-248ba.firebaseio.com"
-});
+    const bodyParser = require("body-parser")
 
-app.get('/setAdmin', async (req,res) => {
-    admin.auth()
-        .setCustomUserClaims('xGmqAyUW1ZggN9nJtCPIXwWXfzy1', {
-            type: 'administrator'
-        }).then(() => console.log('done'))
+    app.use(bodyParser.json());
+    app.use(
+        bodyParser.urlencoded({
+            extended: true
+        })
+    )
+
+// TEST || GET
+app.get("/api/", (req, res) => {
+    db.query(
+      "SELECT * from wizard",
+      (err, results) => {
+        if (err) {
+          res.status(500).send("Erreur lors de la récupération des données")
+        } else {
+          res.status(200).json(results)
+        }
+      }
+    )
+  })
+
+app.listen(backendPort, (err) => {
+    if (err) {
+        throw new Error("Something bad happened...")
+    } else {
+        console.log(`Server is listening on ${backendPort}`)
+    }
 })
-
-app.listen(4000, () => console.log('listening on port 4000'))
