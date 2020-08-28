@@ -1,5 +1,6 @@
 <template>
   <div class="shopping-container">
+    {{ user }}
     <v-dialog
       v-model="thanksDialog"
       max-width="320"

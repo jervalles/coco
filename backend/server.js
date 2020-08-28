@@ -3,6 +3,13 @@ const express = require("express")
 const app = express()
 const jwt = require("jsonwebtoken")
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  next();
+});
+
 const {
     CONFIG: { jwtSecret, backendPort },
     db,
@@ -60,7 +67,10 @@ app.post("/login", async (req, res, next) => {
             return res.status(401).json({ error: 'Wrong password' })
           }
           res.status(200).json({
-            userId: results[0].iduser,
+            user: {
+              userId: results[0].iduser,
+              email: results[0].email,
+            },
             token: jwt.sign({ userId: results[0].iduser}, jwtSecret)
           })
         })
@@ -74,10 +84,10 @@ app.post("/login", async (req, res, next) => {
 })
 
 
-// TEST || GET
-app.get("/api/", (req, res) => {
+// ITEMS FETCHING || GET
+app.get("/api/items", (req, res) => {
     db.query(
-      "SELECT * from wizard",
+      "SELECT * from items",
       (err, results) => {
         if (err) {
           res.status(500).send("Erreur lors de la récupération des données")

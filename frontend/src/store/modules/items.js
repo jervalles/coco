@@ -1,4 +1,5 @@
-import * as firebase from 'firebase'
+// import * as firebase from 'firebase'
+import { fetchItems } from '@/services/ItemService'
 
 const state = {
     items: null,
@@ -27,15 +28,19 @@ const mutations= {
     }
 }
 
+
+
 const actions = {
+   
+    
     fetchItems({ commit }) {
         commit('FETCH_ITEMS_PENDING')
-        firebase.database().ref('items').once('value')
+        fetchItems()
         .then(res => {
             const items = []
-            const obj = res.val()
+            const obj = res.data
             for (let key in obj) {
-                items.push({
+                obj.push({
                     id: key,
                     name: obj[key].name,
                     category: obj[key].category,
@@ -45,7 +50,6 @@ const actions = {
                     added: 0
                 })
             }
-            
             commit('FETCH_ITEMS_SUCCESS', items)
         }).catch(err => {
             console.log(err)
