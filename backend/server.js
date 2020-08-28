@@ -52,7 +52,7 @@ app.post("/login", async (req, res, next) => {
   const email = req.body.email
   const password = req.body.password
 
-  db.query('SELECT * FROM user WHERE email = ?',[email], (err, results) => {
+  db.query('SELECT user.id, user.email, user.password, role.name as role FROM user LEFT JOIN role ON user.role_idroles = role.id WHERE email = ?',[email], (err, results) => {
     console.log({results})
     if (err) {
         res.json({
@@ -68,11 +68,11 @@ app.post("/login", async (req, res, next) => {
           }
           res.status(200).json({
             user: {
-              userId: results[0].iduser,
+              userId: results[0].id,
               email: results[0].email,
               role: results[0].role
             },
-            token: jwt.sign({ userId: results[0].iduser}, jwtSecret)
+            token: jwt.sign({ userId: results[0].id}, jwtSecret)
           })
         })
         .catch(err => res.status(500).json({ err }))
