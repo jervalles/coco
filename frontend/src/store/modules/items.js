@@ -1,4 +1,3 @@
-// import * as firebase from 'firebase'
 import { fetchItems } from '@/services/ItemService'
 
 const state = {
@@ -39,8 +38,9 @@ const actions = {
         .then(res => {
             const items = []
             const obj = res.data
+            
             for (let key in obj) {
-                obj.push({
+                items.push({
                     id: key,
                     name: obj[key].name,
                     category: obj[key].category,

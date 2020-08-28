@@ -1,15 +1,14 @@
 import axios from 'axios'
+import { backend } from '../../conf.js'
 
 const apiInstance = axios.create({
-    baseURL: `http://localhost:5050`
+    baseURL: backend
   })
 
   apiInstance.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem('authtoken')
-      console.log("3")
-      console.log("TEST AUTH TOKEN")
-      console.log(token)
+
       if (token) {
         config.headers['Authorization'] = `Bearer ${ token }`
       }

@@ -1,5 +1,3 @@
-import * as firebase from 'firebase'
-import "firebase/auth"
 import { loginService } from '@/services/LoginService'
 // import Router from '@/router'
 
@@ -9,7 +7,6 @@ const token = window.localStorage.getItem('authtoken')
 const state = {
 	token: token ? token : null,
 	user: userDatas ? userDatas : null,
-	// role: null,
 	authed: token ? true : false,
 	// create user
 	createUserPending: false,
@@ -70,7 +67,6 @@ const mutations= {
 		state.loginUserSuccess = true
 		state.token = token
 		state.user = user
-		// state.role = payload.role
 		state.authed = true
 
 	},
@@ -99,20 +95,20 @@ const mutations= {
 
 const actions = {
 
-	createUser({ commit }, payload) {
-		commit('POST_USER_PENDING')
-			firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-				.then(res => {
-					const newUser = {
-						id: res.user.uid,
-						email: res.user.email
-					}
-					commit('POST_USER_SUCCESS', newUser)
-				})
-				.catch(() => {
-					commit('POST_USER_ERROR')
-				})
-	},
+	// createUser({ commit }, payload) {
+	// 	commit('POST_USER_PENDING')
+	// 		firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+	// 			.then(res => {
+	// 				const newUser = {
+	// 					id: res.user.uid,
+	// 					email: res.user.email
+	// 				}
+	// 				commit('POST_USER_SUCCESS', newUser)
+	// 			})
+	// 			.catch(() => {
+	// 				commit('POST_USER_ERROR')
+	// 			})
+	// },
 
 	loginUser({ commit }, payload) {
 		const { email, password } = payload
@@ -193,8 +189,9 @@ const getters = {
 		error: state.loginUserError
 		}
 	},
+	
 	// role
-	isAdmin: state => state.role === "administrator",
+	isAdmin: state => state.role === "administrator", // NOT USED YET
 
 	isAuthed: state => state.authed,
 }
