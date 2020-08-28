@@ -70,6 +70,7 @@ app.post("/login", async (req, res, next) => {
             user: {
               userId: results[0].iduser,
               email: results[0].email,
+              role: results[0].role
             },
             token: jwt.sign({ userId: results[0].iduser}, jwtSecret)
           })
