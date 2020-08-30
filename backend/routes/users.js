@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+const UserService = require('../services/User.service')
+
 const { 
     db,
     CONFIG: { jwtSecret } 
@@ -13,32 +15,46 @@ const jwt = require("jsonwebtoken")
 router.post("/signup", async (req, res, next) => {
   
     const formData = req.body
-  
-    // Check if user with that email exists
-    // const existingUser = await UserService.getByProperties({ email })
+    let { email, password } = formData
+
+    try {
+
+        // Check if user with that email exists
+        const existingUser = await UserService.getByEmail(email)
+
+        console.log("existingUser")
+        console.log(existingUser)
+
+        if (existingUser) {
+            return res.status(409).json('User with this email already exists')
+        }
+        
+        bcrypt.hash(password, 10, (err, hash) => {
+        password = hash
+        
+        const newUser = { 
+            email: email,
+            password: password,
+            role_id: 2
+        }
     
-    bcrypt.hash(formData.password, 10, (err, hash) => {
-      formData.password = hash
-      
-      const { email, password } = formData
-      const newUser = { 
-        email: email,
-        password: password,
-        role_id: 2
-      }
-  
-        db.query("INSERT INTO user SET ?", [newUser], (err, results) => {
-          if (err) {
-            return res.status(400).send(err.sqlMessage)
-          }
-          newUser.password = undefined
-          newUser.id = results.insertId
-          return res.status(201).send({
-            user: newUser
-          })
+            db.query("INSERT INTO user SET ?", [newUser], (err, results) => {
+            if (err) {
+                return res.status(400).send(err.sqlMessage)
+            }
+            newUser.password = undefined
+            newUser.id = results.insertId
+            return res.status(201).send({
+                user: newUser
+            })
+            })
         })
-    })
-  })
+
+    } catch (err) {
+        return next(err)
+    }
+  
+})
   
 // USER LOGIN || POST
 router.post("/login", async (req, res, next) => {
