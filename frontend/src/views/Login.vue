@@ -21,8 +21,6 @@
 <script>
 import LoginForm from '../components/LoginForm'
 import Router from '../router'
-// import * as firebase from 'firebase'
-import "firebase/auth"
 import { mapGetters, mapActions } from 'vuex'
 
 export default {

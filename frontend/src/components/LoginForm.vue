@@ -41,7 +41,6 @@
 
 <script>
 import Router from '../router'
-import "firebase/auth"
 import { mapGetters, mapActions } from 'vuex'
 
 export default {

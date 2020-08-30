@@ -1,4 +1,3 @@
-import * as firebase from 'firebase'
 
 const state = {
 
@@ -31,30 +30,30 @@ const mutations= {
 
 const actions = {
 
-	createOrder({ commit }, payload) {
-        let user = ''
-        if (payload.user == null) {
-            user = "nouser"
-        } else {
-            user = payload.user
-        }
-        commit('POST_ORDER_PENDING')
+	// createOrder({ commit }, payload) {
+    //     let user = ''
+    //     if (payload.user == null) {
+    //         user = "nouser"
+    //     } else {
+    //         user = payload.user
+    //     }
+    //     commit('POST_ORDER_PENDING')
         
-        return new Promise((resolve) => {
-            firebase.database().ref('orders').push({
-                user,
-                items: payload.order
-            })
-                .then(() => {
-                    commit('POST_ORDER_SUCCESS')
-                    resolve()
-                })
-                .catch((err) => {
-                    console.log(err)
-                    commit('POST_ORDER_ERROR')
-                })
-        })
-    }
+    //     return new Promise((resolve) => {
+    //         firebase.database().ref('orders').push({
+    //             user,
+    //             items: payload.order
+    //         })
+    //             .then(() => {
+    //                 commit('POST_ORDER_SUCCESS')
+    //                 resolve()
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err)
+    //                 commit('POST_ORDER_ERROR')
+    //             })
+    //     })
+    // }
 }
 
 const getters = {

@@ -4,7 +4,6 @@ import Home from './views/Home'
 import Login from './views/Login'
 import Admin from './views/Admin'
 import Register from './views/Register'
-import firebase from 'firebase'
 import store from './store'
 
 Vue.use(vueRouter)
@@ -40,33 +39,26 @@ const router = new vueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+	const userData = JSON.parse(window.localStorage.getItem('user_datas'))
+	console.log("userData")
+	console.log(userData)
 	const { requiresRoles } = to.meta
-	firebase.auth().onAuthStateChanged(userAuth => {
-		if (userAuth) {
-			console.log("userAuth")
-			firebase.auth().currentUser.getIdTokenResult()
-				.then(function ({
-					claims
-				}) {
-					if (to.meta.requiresRoles) {
-						console.log("requires roles")
-						if (!requiresRoles.includes(claims.type)) {
-							next("/login")
-						} else {
-							next()
-						}
-					} else {
-						next()
-					}
-				})
-		} else {
-			if (to.matched.some(record => record.meta.requiresLogin) && !store.getters.isAuthed) {
-				next("/login")
-			} else {
-				next()
-			}
-		}
-	})
+	console.log(requiresRoles)
+	
+	if (to.matched.some(record => record.meta.requiresLogin) && !store.getters.isAuthed) {
+        next("/login")
+        
+    } else if (to.meta.requiresRoles) {
+        if (!requiresRoles.includes(userData.role)) {
+            next("/login")
+        } else {
+            next()
+        }
+
+    } else {
+        next()
+    }
+
 	next()
 })
   

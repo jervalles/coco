@@ -1,5 +1,7 @@
 <template>
   <div class="shopping-container">
+    {{ user }}
+    {{ isAuthed ? 'Logged-in' : 'Not Logged in' }} 
     <v-dialog
       v-model="thanksDialog"
       max-width="320"
@@ -166,7 +168,8 @@ export default {
         'user',
         'items',
         'itemsFetching',
-        'createOrderError'
+        'createOrderError',
+        'isAuthed'
       ]),
       emptyBasket() {
         if (this.items) {

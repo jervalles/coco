@@ -1,19 +1,108 @@
-const express = require('express')
+const mysql = require('mysql')
+const express = require("express")
 const app = express()
-var admin = require("firebase-admin");
+const jwt = require("jsonwebtoken")
 
-var serviceAccount = require("./coco-248ba-firebase-adminsdk-fdiij-a81367e9c4.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://coco-248ba.firebaseio.com"
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  next();
 });
 
-app.get('/setAdmin', async (req,res) => {
-    admin.auth()
-        .setCustomUserClaims('xGmqAyUW1ZggN9nJtCPIXwWXfzy1', {
-            type: 'administrator'
-        }).then(() => console.log('done'))
+const {
+    CONFIG: { jwtSecret, backendPort },
+    db,
+} = require("./conf")
+
+const bcrypt = require("bcrypt")
+
+const bodyParser = require("body-parser")
+
+app.use(bodyParser.json())
+app.use(
+    bodyParser.urlencoded({
+        extended: true
+    })
+)
+
+// USER REGISTRATION || POST
+app.post("/signup", async (req, res, next) => {
+  const formData = req.body
+  
+  bcrypt.hash(formData.password, 10, (err, hash) => {
+    formData.password = hash
+    const newUser = formData
+      db.query("INSERT INTO user SET ?", [newUser], (err, results) => {
+        if (err) {
+          return res.status(400).send(err.sqlMessage)
+        }
+        newUser.password = undefined
+        newUser.id = results.insertId
+        return res.status(201).send({
+          user: newUser,
+          token: jwt.sign(JSON.stringify(newUser), jwtSecret) // ptete pas
+        })
+      })
+  })
 })
 
-app.listen(4000, () => console.log('listening on port 4000'))
+// USER LOGIN || POST
+app.post("/login", async (req, res, next) => {
+  const email = req.body.email
+  const password = req.body.password
+
+  db.query('SELECT user.id, user.email, user.password, role.name as role FROM user LEFT JOIN role ON user.role_idroles = role.id WHERE email = ?',[email], (err, results) => {
+    console.log({results})
+    if (err) {
+        res.json({
+          status:false,
+          message:'there are some error with query'
+          })
+    } else {
+      if (results.length > 0) {
+        bcrypt.compare(password, results[0].password)
+        .then(valid => {
+          if (!valid) {
+            return res.status(401).json({ error: 'Wrong password' })
+          }
+          res.status(200).json({
+            user: {
+              userId: results[0].id,
+              email: results[0].email,
+              role: results[0].role
+            },
+            token: jwt.sign({ userId: results[0].id}, jwtSecret)
+          })
+        })
+        .catch(err => res.status(500).json({ err }))
+        // return res.status(200).json(results)
+      } else {
+        return res.status(401).json({ error: 'User not found' })
+      }
+    }
+  })
+})
+
+
+// ITEMS FETCHING || GET
+app.get("/api/items", (req, res) => {
+    db.query(
+      "SELECT * from items",
+      (err, results) => {
+        if (err) {
+          res.status(500).send("Erreur lors de la récupération des données")
+        } else {
+          res.status(200).json(results)
+        }
+      }
+    )
+  })
+
+app.listen(backendPort, (err) => {
+    if (err) {
+        throw new Error("Something bad happened...")
+    } else {
+        console.log(`Server is listening on ${backendPort}`)
+    }
+})
