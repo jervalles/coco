@@ -7,6 +7,8 @@ Story: During my journey in China, i was impressed by how easily we can order in
 
 Select iPhone X/XS size on firefox to see the mobile render (there is no Desktop render yet)
 
+Developping with Vue.jS and Node.JS/Express.JS
+
 * Coco is a trendmark. It is actually an official restaurant WorldWide. The design of this application isn't related to the officials Coco applications. It is used just to a personal project. If, i will be used in the future, everything will be renamed and the official Coco logo will be removed.
 
 # Figma link
