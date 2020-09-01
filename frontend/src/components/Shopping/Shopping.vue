@@ -1,7 +1,12 @@
 <template>
   <div class="shopping-container">
-    {{ user }}
-    {{ isAuthed ? 'Logged-in' : 'Not Logged in' }} 
+
+    <!-- FOR DEVELOPPEMENT ONLY: USER INFORMATIONS -->
+    <div>
+      {{ user }}
+      {{ isAuthed ? 'Logged-in' : 'Not Logged in' }} 
+    </div>
+  
     <v-dialog
       v-model="thanksDialog"
       max-width="320"

@@ -1,4 +1,5 @@
 import { loginService } from '@/services/LoginService'
+import { postUser } from '@/services/UserService'
 // import Router from '@/router'
 
 const userDatas = JSON.parse(window.localStorage.getItem('user_datas'))
@@ -54,14 +55,7 @@ const mutations= {
 	},
 
 	LOGIN_USER_SUCCESS(state, payload) {
-		console.log("payload")
-		console.log(payload)
 		const { user, token } = payload
-		console.log("user")
-		console.log(user)
-		console.log("token")
-		console.log(token)
-
 		state.loginUserPending = false
 		state.loginUserError = false
 		state.loginUserSuccess = true
@@ -95,20 +89,21 @@ const mutations= {
 
 const actions = {
 
-	// createUser({ commit }, payload) {
-	// 	commit('POST_USER_PENDING')
-	// 		firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-	// 			.then(res => {
-	// 				const newUser = {
-	// 					id: res.user.uid,
-	// 					email: res.user.email
-	// 				}
-	// 				commit('POST_USER_SUCCESS', newUser)
-	// 			})
-	// 			.catch(() => {
-	// 				commit('POST_USER_ERROR')
-	// 			})
-	// },
+	createUser({ commit }, payload) {
+		commit('POST_USER_PENDING')
+			postUser(payload.email, payload.password)
+				.then(res => {
+					const newUser = {
+						id: res.data.user.id,
+						email: res.data.user.email
+					}
+					commit('POST_USER_SUCCESS', newUser)
+				})
+				.catch((e) => {
+					commit('POST_USER_ERROR')
+					console.log(e)
+				})
+	},
 
 	loginUser({ commit }, payload) {
 		const { email, password } = payload
@@ -116,50 +111,14 @@ const actions = {
 		commit('LOGIN_USER_PENDING')
 			loginService(email, password)
 				.then(res => {
-					console.log("resultttt")
-					console.log(res)
 					commit('LOGIN_USER_SUCCESS', res.data)
 					localStorage.setItem('user_datas', JSON.stringify(res.data.user))
 					localStorage.setItem('authtoken', res.data.token)
-					console.log("1")
-					
-					console.log("2")
-
 				})
 				.catch(() => {
 					commit('LOGIN_USER_ERROR')
 				})
 	},
-
-	// loginUser({ commit }, payload) {
-	// 	commit('LOGIN_USER_PENDING')
-	// 		firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-	// 			.then(res => {
-	// 				const newUser = {
-	// 					id: res.user.uid,
-	// 					email: res.user.email,
-	// 				}
-	// 				return new Promise((resolve) => {
-	// 					firebase.auth().currentUser.getIdTokenResult()
-	// 						.then(tokenResult => {
-	// 							let role = ''
-	// 							console.log(tokenResult.claims.type);
-	// 							if (tokenResult.claims.type === 'administrator') {
-	// 								role = tokenResult.claims.type
-	// 								Router.push({ name: 'admin' })
-	// 							} else {
-	// 								console.log("not admin")
-	// 								role = 'user'
-	// 							}
-	// 							commit('LOGIN_USER_SUCCESS', {newUser, role})
-	// 							resolve(tokenResult)
-	// 						})
-	// 					})
-	// 			})
-	// 			.catch(() => {
-	// 				commit('LOGIN_USER_ERROR')
-	// 			})
-	// },
 
 	logoutUser({commit}) {
 		localStorage.removeItem('user_datas')
