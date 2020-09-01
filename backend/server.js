@@ -1,9 +1,13 @@
+// Server module
 const express = require("express")
+
+// Express instance
 const app = express()
 
-const itemsRoutes = require('./routes/items')
-const usersRoutes = require('./routes/users')
+// Getting routes
+const routes = require("./routes/Routes")
 
+// Cors allows the server to request resources from another url
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -11,6 +15,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// Configuration
 const {
     CONFIG: { backendPort },
 } = require("./conf")
@@ -24,9 +29,10 @@ app.use(
     })
 )
 
-app.use('/api/items', itemsRoutes)
-app.use('/api/users', usersRoutes)
+// Routes setup
+app.use('/api', routes)
 
+// Listening server with the defined port
 app.listen(backendPort, (err) => {
     if (err) {
         throw new Error("Something bad happened...")
