@@ -35,31 +35,28 @@ exports.signupUser = async (req, res, next) => {
         // Check if user with that email exists
         const existingUser = await UserService.getByEmail(email)
 
-        console.log("existingUser")
-        console.log(existingUser)
-
         if (existingUser) {
             return res.status(409).json('User with this email already exists')
         }
         
         bcrypt.hash(password, 10, (err, hash) => {
-        password = hash
-        
-        const newUser = { 
-            email: email,
-            password: password,
-            role_id: 2
-        }
-    
-            db.query("INSERT INTO user SET ?", [newUser], (err, results) => {
-            if (err) {
-                return res.status(400).send(err.sqlMessage)
+            password = hash
+            
+            const newUser = { 
+                email: email,
+                password: password,
+                role_id: 2
             }
-            newUser.password = undefined
-            newUser.id = results.insertId
-            return res.status(201).send({
-                user: newUser
-            })
+        
+            db.query("INSERT INTO user SET ?", [newUser], (err, results) => {
+                if (err) {
+                    return res.status(400).send(err.sqlMessage)
+                }
+                newUser.password = undefined
+                newUser.id = results.insertId
+                return res.status(201).send({
+                    user: newUser
+                })
             })
         })
 
@@ -75,7 +72,7 @@ exports.signupUser = async (req, res, next) => {
  * @param {req} req request
  * @param {res} res response
  * @param {next} next callback method to call next middleware
- * @returns {Object} new user json format
+ * @returns {Object} user json format
  */
 exports.loginUser = (req, res, next) => {
     const email = req.body.email
