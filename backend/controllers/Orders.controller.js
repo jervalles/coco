@@ -12,6 +12,7 @@ function groupBy(key, array) {
       let added = false
       for (let j = 0; j < result.length; j++) {
         if (result[j][key] == array[i][key]) {
+            
           result[j].items.push(array[i])
           added = true
           break
@@ -20,6 +21,8 @@ function groupBy(key, array) {
       if (!added) {
         let entry = {items: []}
         entry[key] = array[i][key]
+        entry['userEmail'] = array[i]['userEmail']
+        entry['orderDate'] = array[i]['orderDate']
         entry.items.push(array[i])
         result.push(entry)
       }
