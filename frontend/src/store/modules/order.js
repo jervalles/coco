@@ -1,5 +1,12 @@
+import { fetchOrders } from '@/services/OrderService'
 
 const state = {
+    orders: null,
+
+    // GET ORDERS STATUS
+    ordersFetchSuccess: false,
+    ordersFetchError: false,
+    ordersFetching: false,
 
     // create order
 	createOrderPending: false,
@@ -8,6 +15,24 @@ const state = {
 }
 
 const mutations= {
+
+    // fetch orders
+    FETCH_ORDERS_SUCCESS(state, payload) {
+        state.orders = payload
+        state.ordersFetchSuccess = true
+        state.ordersFetchError = false
+        state.ordersFetching = false
+    },
+    FETCH_ORDERS_ERROR(state) {
+        state.ordersFetchSuccess = false
+        state.ordersFetchError = true
+        state.ordersFetching = false
+    },
+    FETCH_ORDERS_PENDING(state) {
+        state.ordersFetching = true
+        state.ordersFetchSuccess = false
+        state.ordersFetchError = true
+    },
 
     // create order
     POST_ORDER_SUCCESS(state) {
@@ -29,6 +54,21 @@ const mutations= {
 }
 
 const actions = {
+
+    fetchOrders({ commit }) {
+        commit('FETCH_ORDERS_PENDING')
+        fetchOrders()
+        .then(res => {
+            // const items = []
+            const obj = res.data
+            console.log("obj")
+            console.log(obj)
+            commit('FETCH_ORDERS_SUCCESS', obj)
+        }).catch(err => {
+            console.log(err)
+            commit('FETCH_ORDERS_ERROR')
+        })
+    }
 
 	// createOrder({ commit }, payload) {
     //     let user = ''
@@ -57,7 +97,16 @@ const actions = {
 }
 
 const getters = {
-
+    orders(state) {
+		return state.orders
+    },
+    ordersFetching: state => {
+        return {
+          pending: state.ordersFetching,
+          success: state.ordersFetchSuccess,
+          error: state.ordersFetchError
+        }
+    },
     createOrderError: state => {
 		return {
             pending: state.createOrderPending,

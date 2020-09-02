@@ -2,6 +2,7 @@ import { fetchItems } from '@/services/ItemService'
 
 const state = {
     items: null,
+
     // GET ITEMS STATUS
     itemsFetchSuccess: false,
     itemsFetchError: false,
@@ -68,7 +69,7 @@ const getters = {
           success: state.itemsFetchSuccess,
           error: state.itemsFetchError
         }
-      },
+    },
 }
 
 const itemsModule = {
