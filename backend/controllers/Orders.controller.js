@@ -104,14 +104,11 @@ exports.create = async (req, res, next) => {
               db.query(
                 "INSERT INTO order_items SET ?", orderItems, (err, results) => {
                   if (err) {
-                    throw "This is the error text"
-                  } else {
-                    next
-                  }
+                    res.status(500).send("Erreur d'écriture des données")
+                  } 
                 }
               )
             }
-
             res.status(201).send({
               order: newOrder
             })
