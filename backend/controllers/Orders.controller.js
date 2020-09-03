@@ -2,6 +2,7 @@
  * @controller OrderController
  * @description Handling orders requests
  * @method fetchOrders
+ * @method create
  */
 
 const { db } = require("../conf")
@@ -62,5 +63,60 @@ exports.fetchOrders = (req, res) => {
     } catch (err) {
         return next(err)
     }
-    
+}
+
+/**
+ * @description creating an order
+ * @listens /api/orders/
+ * @method create
+ * @param {req} req request
+ * @param {res} res response
+ * @param {next} next callback method to call next middleware
+ * @returns {Array} new order json format
+ */
+
+exports.create = async (req, res, next) => {
+  const formData = req.body
+
+  const newOrder = {
+    user_id: formData.user.userId,
+    date: new Date()
+  }
+
+  const newOrderItems = formData.items
+
+  try {
+    await db.query(
+      "INSERT INTO orders SET ?", newOrder, (err, results) => {
+        if (err) {
+            res.status(500).send("Erreur d'écriture des données")
+        } else {
+            newOrder.id = results.insertId
+
+            for (let i = 0; i < newOrderItems.length; i++) {
+
+              let orderItems = {
+                orders_id: newOrder.id,
+                items_id: newOrderItems[i].id,
+                quantity: newOrderItems[i].added
+              }
+
+              db.query(
+                "INSERT INTO order_items SET ?", orderItems, (err, results) => {
+                  if (err) {
+                    res.status(500).send("Erreur d'écriture des données")
+                  } 
+                }
+              )
+            }
+            res.status(201).send({
+              order: newOrder
+            })
+
+        }
+    })
+
+  } catch (err) {
+      return next()
+  }
 }
