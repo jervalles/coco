@@ -37,20 +37,11 @@ const actions = {
         commit('FETCH_ITEMS_PENDING')
         fetchItems()
         .then(res => {
-            const items = []
-            const obj = res.data
-            
-            for (let key in obj) {
-                items.push({
-                    id: key,
-                    name: obj[key].name,
-                    category: obj[key].category,
-                    description: obj[key].description,
-                    image: obj[key].image,
-                    price: obj[key].price,
-                    added: 0
-                })
+            const items = res.data
+            for (let key in items) {
+                items[key]['added'] = 0
             }
+
             commit('FETCH_ITEMS_SUCCESS', items)
         }).catch(err => {
             console.log(err)
