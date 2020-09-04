@@ -77,7 +77,7 @@ exports.fetchOrders = (req, res) => {
 
 exports.create = async (req, res, next) => {
   const formData = req.body
-
+  
   try {
 
     // Looks if there is no item
@@ -86,40 +86,59 @@ exports.create = async (req, res, next) => {
     }
 
     const newOrder = {
-      user_id: formData.user.userId,
-      date: new Date()
+        user_id: formData.user.userId,
+        date: new Date()
     }
-
+  
     const newOrderItems = formData.items
+  
+    await db.query(
+      "INSERT INTO orders SET ?", newOrder, (err, results) => {
 
-      await db.query(
-        "INSERT INTO orders SET ?", newOrder, (err, results) => {
-          if (err) {
-              return res.status(500).send("Erreur d'écriture des données")
-          } else {
-              newOrder.id = results.insertId
+        if (err) {
+          return res.status(500).send("Erreur d'écriture des données")
+        }
 
-              for (let i = 0; i < newOrderItems.length; i++) {
+        newOrder.id = results.insertId
+        const errData = []
+        let queryCounter = 0
 
-                let orderItems = {
-                  orders_id: newOrder.id,
-                  items_id: newOrderItems[i].id,
-                  quantity: newOrderItems[i].added
-                }
+        for (let i = 0; i < newOrderItems.length; i++) {
 
-                db.query(
-                  "INSERT INTO order_items SET ?", orderItems, (err, results) => {
-                    if (err) {
-                      return res.status(500).send("Erreur d'écriture des données")
-                    } 
-                  }
-                )
-              }
-              return res.status(201).send({
-                order: newOrder
-              })
+          let orderItems = {
+              orders_id: newOrder.id,
+              items_id: newOrderItems[i].id,
+              quantity: newOrderItems[i].added
           }
+
+          db.query(
+              "INSERT INTO order_items SET ?", orderItems, (err, results) => {
+
+                  // keeping track of records tried
+                  queryCounter++
+                  
+                  if (err) {
+                      errData.push(err)
+                  }
+
+                  // check if all callback came back
+                  if (queryCounter === newOrderItems.length) {
+                    if (errData.length) {
+                        return res.status(500).send({
+                            message: 'Failed to insert items',
+                            errors: errData
+                        })
+                    }
+
+                    return res.status(201).send({
+                        order: newOrder
+                    })
+                  }
+              }
+          )
+        }
       })
+  
   } catch (err) {
       return next(err)
   }
