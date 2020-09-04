@@ -78,44 +78,48 @@ exports.fetchOrders = (req, res) => {
 exports.create = async (req, res, next) => {
   const formData = req.body
 
-  const newOrder = {
-    user_id: formData.user.userId,
-    date: new Date()
-  }
-
-  const newOrderItems = formData.items
-
   try {
-    await db.query(
-      "INSERT INTO orders SET ?", newOrder, (err, results) => {
-        if (err) {
-            res.status(500).send("Erreur d'écriture des données")
-        } else {
-            newOrder.id = results.insertId
 
-            for (let i = 0; i < newOrderItems.length; i++) {
+    // Looks if there is no item
+    if (!formData.items.length) {
+      return res.status(500).send({ error: "Aucun produit envoyé en paramètre"})
+    }
 
-              let orderItems = {
-                orders_id: newOrder.id,
-                items_id: newOrderItems[i].id,
-                quantity: newOrderItems[i].added
-              }
+    const newOrder = {
+      user_id: formData.user.userId,
+      date: new Date()
+    }
 
-              db.query(
-                "INSERT INTO order_items SET ?", orderItems, (err, results) => {
-                  if (err) {
-                    res.status(500).send("Erreur d'écriture des données")
-                  } 
+    const newOrderItems = formData.items
+
+      await db.query(
+        "INSERT INTO orders SET ?", newOrder, (err, results) => {
+          if (err) {
+              return res.status(500).send("Erreur d'écriture des données")
+          } else {
+              newOrder.id = results.insertId
+
+              for (let i = 0; i < newOrderItems.length; i++) {
+
+                let orderItems = {
+                  orders_id: newOrder.id,
+                  items_id: newOrderItems[i].id,
+                  quantity: newOrderItems[i].added
                 }
-              )
-            }
-            res.status(201).send({
-              order: newOrder
-            })
 
-        }
-    })
-
+                db.query(
+                  "INSERT INTO order_items SET ?", orderItems, (err, results) => {
+                    if (err) {
+                      return res.status(500).send("Erreur d'écriture des données")
+                    } 
+                  }
+                )
+              }
+              return res.status(201).send({
+                order: newOrder
+              })
+          }
+      })
   } catch (err) {
       return next(err)
   }
