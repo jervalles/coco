@@ -1,4 +1,5 @@
 import { fetchOrders } from '@/services/OrderService'
+import { postOrder } from '@/services/OrderService'
 
 const state = {
     orders: null,
@@ -59,41 +60,40 @@ const actions = {
         commit('FETCH_ORDERS_PENDING')
         fetchOrders()
         .then(res => {
-            // const items = []
-            const obj = res.data
-            console.log("obj")
-            console.log(obj)
-            commit('FETCH_ORDERS_SUCCESS', obj)
+            const items = res.data
+            commit('FETCH_ORDERS_SUCCESS', items)
         }).catch(err => {
             console.log(err)
             commit('FETCH_ORDERS_ERROR')
         })
-    }
+    },
 
-	// createOrder({ commit }, payload) {
-    //     let user = ''
-    //     if (payload.user == null) {
-    //         user = "nouser"
-    //     } else {
-    //         user = payload.user
-    //     }
-    //     commit('POST_ORDER_PENDING')
-        
-    //     return new Promise((resolve) => {
-    //         firebase.database().ref('orders').push({
-    //             user,
-    //             items: payload.order
-    //         })
-    //             .then(() => {
-    //                 commit('POST_ORDER_SUCCESS')
-    //                 resolve()
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err)
-    //                 commit('POST_ORDER_ERROR')
-    //             })
-    //     })
-    // }
+	createOrder({ commit }, payload) {
+        let user = ''
+        if (payload.user == null) {
+            user = "noUser"
+        } else {
+            user = payload.user
+        }
+        console.log("payload.order")
+        console.log(payload.order)
+        commit('POST_ORDER_PENDING')
+            const order = {
+                user,
+                items: payload.order
+            }
+            console.log("order")
+            console.log(order)
+            postOrder(order)
+                .then(() => {
+
+                    commit('POST_ORDER_SUCCESS')
+                })
+                .catch((err) => {
+                    console.log(err)
+                    commit('POST_ORDER_ERROR')
+                })
+    }
 }
 
 const getters = {

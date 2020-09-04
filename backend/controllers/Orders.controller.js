@@ -117,6 +117,6 @@ exports.create = async (req, res, next) => {
     })
 
   } catch (err) {
-      return next()
+      return next(err)
   }
 }
