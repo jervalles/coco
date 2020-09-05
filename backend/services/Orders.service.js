@@ -1,17 +1,18 @@
 const { db } = require("../conf")
 
-class UserService {
+class OrdersService {
 
-    static async getByEmail(properties) {
-        const user = properties
+    static async getById(properties) {
+        const orderId = properties
 
         return new Promise(function(resolve, reject) {
             db.query(
-                "SELECT COUNT(user.email) AS count from user WHERE email = ?", user,
+                "SELECT COUNT(orders.id) AS count from orders WHERE id = ?", orderId,
                 (err, rows) => {
-                    
+
                     if (err) {
                         reject(err)
+
                     } else {
                         let results = rows[0].count
                         if (results > 0) {
@@ -26,4 +27,4 @@ class UserService {
       }
 }
 
-module.exports = UserService
+module.exports = OrdersService

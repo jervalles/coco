@@ -3,9 +3,12 @@
  * @description Handling orders requests
  * @method fetchOrders
  * @method create
+ * @method delete
  */
 
 const { db } = require("../conf")
+
+const OrdersService = require('../services/Orders.service')
 
 function groupBy(key, array) {
     let result = []
@@ -142,4 +145,39 @@ exports.create = async (req, res, next) => {
   } catch (err) {
       return next(err)
   }
+}
+
+/**
+ * @description deleting an order
+ * @listens /api/orders/:id
+ * @method delete
+ * @param {req} req request
+ * @param {res} res response
+ * @param {next} next callback method to call next middleware
+ * @returns {Array} new order json format
+ */
+
+exports.delete = async (req, res, next) => {
+  const { id } = req.params
+
+  try {
+
+    // Check if order with that id exists
+    const existingOrder = await OrdersService.getById(id)
+
+    if (!existingOrder) {
+      return res.status(404).json('No order with that ID')
+    }
+
+    await db.query("DELETE FROM orders WHERE id = ?", [id], (err, results) => {
+      if (err) {
+        return res.status(400).send(err.sqlMessage)
+      }
+      return res.status(201).send("Order deleted")
+    })
+
+  } catch (err) {
+      return next(err)
+    }
+
 }
