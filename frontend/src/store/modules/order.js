@@ -137,14 +137,14 @@ const getters = {
           error: state.ordersFetchError
         }
     },
-    createOrderError: state => {
+    createOrderStatus: state => {
 		return {
             pending: state.createOrderPending,
             success: state.createOrderSuccess,
             error: state.createOrderError
         }
     },
-    deleteOrderError: state => {
+    deleteOrderStatus: state => {
 		return {
             pending: state.deleteOrderPending,
             success: state.deleteOrderSuccess,
