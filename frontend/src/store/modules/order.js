@@ -1,5 +1,6 @@
 import { fetchOrders } from '@/services/OrderService'
 import { postOrder } from '@/services/OrderService'
+import { destroyOrder } from '@/services/OrderService'
 
 const state = {
     orders: null,
@@ -9,10 +10,15 @@ const state = {
     ordersFetchError: false,
     ordersFetching: false,
 
-    // create order
+    // CREATE ORDERS STATUS
 	createOrderPending: false,
 	createOrderSuccess: false,
-	createOrderError: false,
+    createOrderError: false,
+    
+    // DELETE ORDERS STATUS
+	deleteOrderPending: false,
+	deleteOrderSuccess: false,
+	deleteOrderError: false,
 }
 
 const mutations= {
@@ -52,6 +58,23 @@ const mutations= {
         state.createOrderError = true
     },
 
+    // delete order
+    DELETE_ORDER_SUCCESS(state) {
+        state.deleteOrderSuccess = true
+        state.deleteOrderPending = false
+        state.deleteOrderError = false
+    },
+    DELETE_ORDER_PENDING(state) {
+        state.deleteOrderSuccess = false
+        state.deleteOrderPending = true
+        state.deleteOrderError = false
+    },
+    DELETE_ORDER_ERROR(state) {
+        state.deleteOrderSuccess = false
+        state.deleteOrderPending = false
+        state.deleteOrderError = true
+    }
+
 }
 
 const actions = {
@@ -75,24 +98,31 @@ const actions = {
         } else {
             user = payload.user
         }
-        console.log("payload.order")
-        console.log(payload.order)
         commit('POST_ORDER_PENDING')
             const order = {
                 user,
                 items: payload.order
             }
-            console.log("order")
-            console.log(order)
             postOrder(order)
                 .then(() => {
-
                     commit('POST_ORDER_SUCCESS')
                 })
                 .catch((err) => {
                     console.log(err)
                     commit('POST_ORDER_ERROR')
                 })
+    },
+
+    deleteOrder({ commit }, payload) {
+        commit('DELETE_ORDER_PENDING')
+        destroyOrder(payload)
+            .then(() => {
+                commit('DELETE_ORDER_SUCCESS')
+            })
+            .catch(err => {
+                console.log(err)
+                commit('DELETE_ORDER_ERROR')
+            })
     }
 }
 
@@ -114,6 +144,13 @@ const getters = {
             error: state.createOrderError
         }
     },
+    deleteOrderError: state => {
+		return {
+            pending: state.deleteOrderPending,
+            success: state.deleteOrderSuccess,
+            error: state.deleteOrderError
+        }
+    }
 }
 
 const orderModule = {

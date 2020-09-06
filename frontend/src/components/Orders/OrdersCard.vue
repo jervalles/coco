@@ -8,7 +8,7 @@
         <div v-for="(item, i) in order.items" :key="i">
             {{ item.itemName }}: <span class="item-quantity">{{ item.quantity }}</span>
         </div>
-        <v-btn small color="success" class="order-delete">RECEPTION FAITE</v-btn>
+        <v-btn @click="removeOrder()" small color="success" class="order-delete">RECEPTION FAITE</v-btn>
     </div>
 </template>
 
@@ -27,6 +27,12 @@ export default {
             order: Object,
             index: Number
         },
+        computer: {},
+        methods: {
+            removeOrder() {
+                this.$emit('delete-order')
+            },
+        }
 }
 
 </script>
