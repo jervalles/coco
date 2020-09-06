@@ -7,3 +7,7 @@ export const fetchOrders = () => {
 export const postOrder = (order) => {
     return apiInstance.post('/api/orders', order)
 }
+
+export const destroyOrder = (orderId) => {
+    return apiInstance.delete(`/api/orders/${orderId}`)
+}

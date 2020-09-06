@@ -4,6 +4,7 @@
             <orders-card 
                 :order="order"
                 :index="i"
+                v-on:delete-order="removeOrder(i, order.orderId)"
             />
         </div>
     </div>
@@ -33,10 +34,14 @@ import OrdersCard from '../Orders/OrdersCard'
         methods: {
             ...mapActions([
                 'fetchOrders',
-                'createOrder'
+                'deleteOrder'
             ]),
             async init() {
                 await this.fetchOrders()
+            },
+            async removeOrder(index, orderId) {
+                await this.deleteOrder(orderId)
+                this.orders.splice(index, 1)
             }
         }
     }
