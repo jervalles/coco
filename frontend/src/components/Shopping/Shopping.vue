@@ -160,7 +160,7 @@ export default {
           // console.log("NOT OK")
         }
       },
-      createOrderError(status) {
+      createOrderStatus(status) {
         if (status.error) {
           this.errorOrderBdd = true
         } else if (status.success) {
@@ -173,7 +173,7 @@ export default {
         'user',
         'items',
         'itemsFetching',
-        'createOrderError',
+        'createOrderStatus',
         'isAuthed'
       ]),
       emptyBasket() {
