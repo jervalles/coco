@@ -18,7 +18,9 @@ const { db } = require("../conf")
 
 exports.fetchItems = (req, res) => {
     db.query(
-        "SELECT * from items",
+        "SELECT items.id, items.name, description, price, image, category_id AS category, category.name AS category_name FROM items \
+        LEFT JOIN category ON category.id = items.category_id \
+        ORDER by items.id;",
         (err, results) => {
             if (err) {
                 res.status(500).send("Erreur lors de la récupération des données")
