@@ -3,7 +3,8 @@ import Vuex from 'vuex'
 import user from './modules/user'
 import items from './modules/items'
 import order from './modules/order'
-import createPersistedState from "vuex-persistedstate";
+import itemCategories from './modules/item-categories'
+import createPersistedState from "vuex-persistedstate"
 
 Vue.use(Vuex)
 
@@ -11,7 +12,8 @@ export default new Vuex.Store({
     modules: {
         user,
         items,
-        order
+        order,
+        itemCategories
     },
     plugins: [createPersistedState()],
 })

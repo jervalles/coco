@@ -100,7 +100,7 @@
     <div class="shopping">
       <div class="left-menu">
         <category-list 
-          :categories="categories" 
+          :categories="this.categories" 
           @selectCategory="selectCategory($event)" 
         />
         <v-btn x-small @click="loginPage()">Account</v-btn>
@@ -132,15 +132,7 @@ export default {
     },
     data() {
       return {
-        categories: [
-          { name: 'Categorie 1' },
-          { name: 'Categorie 2' },
-          { name: 'Categorie 3' },
-          { name: 'Categorie 4' },
-          { name: 'Categorie 5' },
-          { name: 'Categorie 6' },
-        ],
-        selectedCategory: 0,
+        selectedCategory: 1,
         totalPrice: 0,
         basketIsOpen: false,
         basketIsEmpty: true,
@@ -172,6 +164,7 @@ export default {
       ...mapGetters([
         'user',
         'items',
+        'categories',
         'itemsFetching',
         'createOrderStatus',
         'isAuthed'
@@ -194,14 +187,16 @@ export default {
     },
     methods: {
       ...mapActions([
-      'fetchItems',
-      'createOrder'
+        'fetchItemCategories',
+        'fetchItems',
+        'createOrder'
 		]),
       async init() {
+        await this.fetchItemCategories()
         await this.fetchItems()
       },
       selectCategory(event) {
-        this.selectedCategory = event
+        this.selectedCategory = event + 1
       },
       addItem(event) {
         this.items[event].added += 1
@@ -250,7 +245,8 @@ export default {
         }.bind(this), 5000);
       },
       loginPage() {
-        Router.push({ name: 'login'}).then(() => window.scrollTo(0, 0));
+        Router.push({ name: 'login'})
+          .then(() => window.scrollTo(0, 0))
       },
       basket() {
         this.basketIsOpen = true

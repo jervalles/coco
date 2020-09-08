@@ -1,6 +1,9 @@
-import { fetchOrders } from '@/services/OrderService'
-import { postOrder } from '@/services/OrderService'
-import { destroyOrder } from '@/services/OrderService'
+import { 
+    fetchOrders, 
+    postOrder, 
+    destroyOrder
+} from '@/services/OrderService'
+
 
 const state = {
     orders: null,
@@ -9,6 +12,11 @@ const state = {
     ordersFetchSuccess: false,
     ordersFetchError: false,
     ordersFetching: false,
+
+    // GET ORDERS STATUS
+    categoriesFetchSuccess: false,
+    categoriesFetchError: false,
+    categoriesFetching: false,
 
     // CREATE ORDERS STATUS
 	createOrderPending: false,
