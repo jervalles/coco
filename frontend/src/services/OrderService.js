@@ -4,8 +4,8 @@ export const fetchOrders = () => {
     return apiInstance.get('/api/orders')
 }
 
-export const postOrder = (order) => {
-    return apiInstance.post('/api/orders', order)
+export const postOrder = (orders) => {
+    return apiInstance.post('/api/orders', orders)
 }
 
 export const destroyOrder = (orderId) => {
