@@ -63,7 +63,7 @@
               <span class="sous-total">Sous-total: </span>
               <span class="total-price">{{ totalPrice }}€</span>
             </div>
-            <div v-for="(item, i) in this.items"
+            <div v-for="(item, i) in this.itemsInBasket"
               :key="i"
             >
               <items-card 
@@ -140,7 +140,7 @@ export default {
         loading: true,
         emptyBasketAlert: false,
         thanksDialog: false,
-        itemsToOrder: [],
+        itemsInBasket: [],
         errorOrderBdd: false
       }
     },
@@ -198,9 +198,14 @@ export default {
       selectCategory(event) {
         this.selectedCategory = event + 1
       },
-      addItem(event) {
-        this.items[event].added += 1
-        this.totalPrice += this.items[event].price
+      addItem(index) {
+        if (this.itemsInBasket.includes(this.items[index])) {
+          this.items[index].added += 1
+        } else {
+          this.items[index].added += 1
+          this.itemsInBasket.push(this.items[index])
+        }
+        this.totalPrice += this.items[index].price
       },
       removeItem(event) {
         if (this.items[event].added > 0) {
@@ -215,14 +220,9 @@ export default {
           this.items[i].added = 0
         }
         this.totalPrice = 0
-        this.itemsToOrder = []
+        this.itemsInBasket = []
       },
       order() {
-        for (let i = 0; i < this.items.length; i++) {
-          if (this.items[i].added > 0) {
-            this.itemsToOrder.push(this.items[i])
-          }
-        }
         if (this.emptyBasket) {
           this.emptyBasketAlert = true
         } else {
@@ -233,7 +233,7 @@ export default {
         this.orderDialogAsk = true
       },
       async confirmOrder() {
-        await this.createOrder({order: this.itemsToOrder, user: this.user})
+        await this.createOrder({order: this.itemsInBasket, user: this.user})
       },
       orderSucess() {
         this.orderDialogAsk = false
