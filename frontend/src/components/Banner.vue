@@ -1,7 +1,7 @@
 <template>
   <div class="banner">
     <img class="banner-img" src='../images/banner.jpg'/>
-    <img class="logo" src='../images/logo-main.jpg'/>
+    <img class="logo" src='../images/logo-main.png'/>
   </div>
 </template>
 
@@ -17,14 +17,12 @@ export default {
 
 .banner {
   display: flex;
-  // position: absolute;
   justify-content: center;
   .banner-img {
-  width: 100%;
-  height: auto;
-  position: relative;
+    width: 100%;
+    height: auto;
+    position: relative;
   }
-
   .logo {
     position: absolute;
     height: 30vw;
@@ -33,7 +31,5 @@ export default {
     border-color: wheat;
   }
 }
-
-
 
 </style>
