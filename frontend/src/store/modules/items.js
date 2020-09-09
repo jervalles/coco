@@ -1,5 +1,10 @@
 import { fetchItems } from '@/services/ItemService'
 
+// TO REMOVE IN PRODUCTION - SIMULATING A NO LOCAL DB SERVER
+function timeout(ms) {
+    return value => new Promise(resolve => setTimeout(() => resolve(value), ms))
+}
+
 const state = {
     items: null,
 
@@ -22,6 +27,7 @@ const mutations= {
         state.itemsFetching = false
     },
     FETCH_ITEMS_PENDING(state) {
+        state.items = []
         state.itemsFetching = true
         state.itemsFetchSuccess = false
         state.itemsFetchError = true
@@ -31,21 +37,24 @@ const mutations= {
 
 
 const actions = {
-   
-    
-    fetchItems({ commit }) {
-        commit('FETCH_ITEMS_PENDING')
-        fetchItems()
-        .then(res => {
-            const items = res.data
-            for (let key in items) {
-                items[key]['added'] = 0
-            }
 
-            commit('FETCH_ITEMS_SUCCESS', items)
-        }).catch(err => {
-            console.log(err)
-            commit('FETCH_ITEMS_ERROR')
+    fetchItems({ commit }) {
+        return new Promise((resolve) => {
+            commit('FETCH_ITEMS_PENDING')
+            fetchItems()
+                .then(timeout(1000)).then(res => {
+                    const items = res.data
+                    for (let key in items) {
+                        items[key]['added'] = 0
+                    }
+                    commit('FETCH_ITEMS_SUCCESS', items)
+                    resolve(res)
+
+                }).catch(err => {
+                    console.log(err)
+                    commit('FETCH_ITEMS_ERROR')
+                    resolve(null)
+                })
         })
     }
 }
