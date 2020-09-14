@@ -9,23 +9,23 @@
         >
           <template>
             <v-card>
-            <v-card-title>CONFIRMATION</v-card-title>
-            <v-card-text>Confirmez-vous la commande ?</v-card-text>
-            <v-alert 
-              v-if="errorOrderBdd"
-              type="warning"
-              dismissible>
-              Un problème est survenu. Etes-vous connecté ?
-          </v-alert>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="red" @click="orderDialogAsk = false">ANNULER</v-btn>
-              <v-btn color="primary" @click="confirmOrder">CONFIRMER</v-btn>
-            </v-card-actions>
-          </v-card>
+              <v-card-title>CONFIRMATION</v-card-title>
+              <v-card-text>Confirmez-vous la commande ?</v-card-text>
+              <v-alert 
+                v-if="errorOrderBdd"
+                type="warning"
+                dismissible>
+                Un problème est survenu. Etes-vous connecté ?
+              </v-alert>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="red" @click="orderDialogAsk = false">ANNULER</v-btn>
+                <v-btn color="primary" @click="confirmOrder">CONFIRMER</v-btn>
+              </v-card-actions>
+            </v-card>
           </template>  
         </v-dialog>
-        <v-toolbar dark color="primary">
+        <v-toolbar dark color="#EB5604">
           <v-btn icon dark @click="closeBasket()">
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -35,6 +35,8 @@
         <div class="basket-cards">
           <v-alert 
             v-if="emptyBasketAlert"
+            width="100%"
+            text
             type="warning"
             dismissible>
             Votre panier est vide.
@@ -54,7 +56,7 @@
               @removeItem="removeItem($event)"
             />
           </div>
-          <div>
+          <div class="basket-buttons">
             <v-btn @click="clear()"
               class="clear-basket"
               color="red" 
@@ -168,8 +170,13 @@
 <style lang="scss">
   .basket-cards {
     margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     .final-price {
-      background-color: rgb(212, 226, 247);
+      width: 96%;
+      background-color:#FCD7AD;
       border-radius: 5px;
       margin: 6px;
       .sous-total {
@@ -180,9 +187,15 @@
         margin-left: 2px;
       }
     }
-    .clear-basket {
-      margin-left: 6px;
+    .basket-buttons {
+      width: 96%;
+      display: flex;
+      justify-content: space-around;
+      .clear-basket {
+        margin-left: 6px;
+      }
     }
+    
   }
 
 </style>
