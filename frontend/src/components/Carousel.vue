@@ -11,22 +11,8 @@
       <v-carousel-item
         v-for="(slide, i) in slides"
         :key="i"
+        :src="slide.src"
       >
-        <v-sheet
-          :color="colors[i]"
-          height="100%"
-        >
-          <v-row
-            class="fill-height"
-            align="center"
-            justify="center"
-          >
-            <div class="display-3">
-              {{ slide }} slide
-            </div>
-          </v-row>
-        </v-sheet>
-
       </v-carousel-item>
 		</v-carousel>
   </div>
@@ -45,11 +31,8 @@ export default {
         'deep-purple accent-4'
       ],
       slides: [
-        'First',
-        'Second',
-        'Third',
-        'Fourth',
-        'Fifth'
+        { src: require('../images/banner1.jpg')},
+        { src: require('../images/banner2.jpg')}
       ]
     }
   }

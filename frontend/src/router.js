@@ -43,7 +43,6 @@ router.beforeEach((to, from, next) => {
 	console.log("userData")
 	console.log(userData)
 	const { requiresRoles } = to.meta
-	console.log(requiresRoles)
 	
 	if (to.matched.some(record => record.meta.requiresLogin) && !store.getters.isAuthed) {
         next("/login")

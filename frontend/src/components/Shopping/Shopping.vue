@@ -6,105 +6,49 @@
       {{ user }}
       {{ isAuthed ? 'Logged-in' : 'Not Logged in' }} 
     </div>
-  
+    <!-- -->
+
     <v-dialog
       v-model="thanksDialog"
       max-width="320"
     >
       <template>
         <v-card>
-        <v-card-title>CONFIRMATION</v-card-title>
-        <v-card-text>Merci pour votre commande :)</v-card-text>
-        <v-card-actions>
-        </v-card-actions>
-      </v-card>
+          <v-card-title>CONFIRMATION</v-card-title>
+          <v-card-text>Merci pour votre commande :)</v-card-text>
+        </v-card>
       </template> 
     </v-dialog>
-    <v-dialog v-model="basketIsOpen" fullscreen hide-overlay transition="dialog-bottom-transition">
-        <v-card>
-          <v-dialog
-            v-model="orderDialogAsk"
-            persistent
-            max-width="320"
-          >
-            <template>
-              <v-card>
-              <v-card-title>CONFIRMATION</v-card-title>
-              <v-card-text>Confirmez-vous la commande ?</v-card-text>
-              <v-alert 
-                v-if="errorOrderBdd"
-                type="warning"
-                dismissible>
-                Un problème est survenu. Etes-vous connecté ?
-            </v-alert>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="red" @click="orderDialogAsk = false">ANNULER</v-btn>
-                <v-btn color="primary" @click="confirmOrder">CONFIRMER</v-btn>
-              </v-card-actions>
-            </v-card>
-            </template>  
-          </v-dialog>
-          <v-toolbar dark color="primary">
-            <v-btn icon dark @click="basketIsOpen = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-            <v-toolbar-title>Panier</v-toolbar-title>
-            <v-spacer></v-spacer>
-          </v-toolbar>
-          <div class="basket-cards">
-            <v-alert 
-              v-if="emptyBasketAlert"
-              type="warning"
-              dismissible>
-              Votre panier est vide.
-            </v-alert>
-            <div class="final-price">
-              <span class="sous-total">Sous-total: </span>
-              <span class="total-price">{{ totalPrice }}€</span>
-            </div>
-            <div v-for="(item, i) in this.itemsInBasket"
-              :key="i"
-            >
-              <items-card 
-                v-if="item.added > 0"
-                :item="item"
-                :index="i"
-                @addItem="addItem($event)"
-                @removeItem="removeItem($event)"
-              />
-            </div>
-            <v-btn @click="clear()" 
-              class="clear-basket"
-              color="red" 
-              dark
-              small
-            >
-              <v-icon dark left>mdi-delete</v-icon>
-              Vider le panier
-            </v-btn>
-            <v-btn
-              class="clear-basket"
-              color="green" 
-              dark
-              small
-              @click="order()"
-            >
-              <v-icon dark left>mdi-cart-outline</v-icon>
-              Valider le panier
-            </v-btn>
-          </div>
-          {{ emptyBasket }}
-        </v-card>
-      </v-dialog>
+
+    <cart-modal 
+      :basketIsOpen="basketIsOpen"
+      :itemsInBasket="itemsInBasket"
+      :totalPrice="totalPrice"
+      :basketIsEmpty="basketIsEmpty"
+      :user="user"
+      @close-basket="basketIsOpen = false"
+      @clear-basket="clear()"
+      @add-item="addItem($event)"
+      @remove-item="removeItem($event)"
+      @confirm-order="confirmOrder($event)"
+      @order-success="orderSuccess()"
+    />
+
     <div class="shopping">
       <div class="left-menu">
         <category-list 
           :categories="this.categories" 
           @selectCategory="selectCategory($event)" 
         />
-        <v-btn x-small @click="loginPage()">Account</v-btn>
-        <v-btn x-small @click="basket()">Panier</v-btn>
+        <div class="user-menu">
+          <v-btn icon large @click="loginPage()">
+            <v-icon>mdi-account</v-icon>
+          </v-btn>
+          <v-btn icon large @click="basket()">
+            <v-icon>mdi-basket</v-icon>
+          </v-btn>
+        </div>
+        
       </div>
       <items-list :items="items" 
         :selectedCategory="selectedCategory"
@@ -119,7 +63,7 @@
 <script>
 import CategoryList from './CategoriesList'
 import ItemsList from './ItemsList'
-import ItemsCard from './ItemsCard'
+import CartModal from './CartModal'
 import Router from '../../router'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -128,7 +72,7 @@ export default {
     components: {
       CategoryList,
       ItemsList,
-      ItemsCard
+      CartModal
     },
     data() {
       return {
@@ -136,12 +80,9 @@ export default {
         totalPrice: 0,
         basketIsOpen: false,
         basketIsEmpty: true,
-        orderDialogAsk: false,
         loading: true,
-        emptyBasketAlert: false,
         thanksDialog: false,
-        itemsInBasket: [],
-        errorOrderBdd: false
+        itemsInBasket: []
       }
     },
      watch: {
@@ -151,13 +92,6 @@ export default {
         } else if (status.error) {
           // console.log("NOT OK")
         }
-      },
-      createOrderStatus(status) {
-        if (status.error) {
-          this.errorOrderBdd = true
-        } else if (status.success) {
-          this.orderSucess()
-        }
       }
     },
     computed: {
@@ -166,23 +100,10 @@ export default {
         'items',
         'categories',
         'itemsFetching',
-        'createOrderStatus',
         'isAuthed'
-      ]),
-      emptyBasket() {
-        if (this.items) {
-          for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i].added > 0) {
-              return
-            }
-          }
-        }
-        
-        return "Votre panier est vide"
-      }
+      ])
     },
     mounted() {
-      console.log(this.user)
       this.init()
     },
     methods: {
@@ -222,27 +143,16 @@ export default {
         this.totalPrice = 0
         this.itemsInBasket = []
       },
-      order() {
-        if (this.emptyBasket) {
-          this.emptyBasketAlert = true
-        } else {
-          this.orderDialog()
-        }
-      },
-      orderDialog() {
-        this.orderDialogAsk = true
-      },
       async confirmOrder() {
         await this.createOrder({order: this.itemsInBasket, user: this.user})
       },
-      orderSucess() {
-        this.orderDialogAsk = false
+      orderSuccess() {
         this.clear()
         this.basketIsOpen = false
         this.thanksDialog = true
         setTimeout(function () {
-          this.thanksDialog = false
-        }.bind(this), 5000);
+            this.thanksDialog = false
+        }.bind(this), 5000)
       },
       loginPage() {
         Router.push({ name: 'login'})
@@ -250,7 +160,6 @@ export default {
       },
       basket() {
         this.basketIsOpen = true
-        this.emptyBasketAlert = false
       }
     }
 }
@@ -273,28 +182,13 @@ export default {
     justify-content: space-between;
     .left-menu {
       width: 110px;
+      .user-menu {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
     }
   }
 }
-
-.basket-cards {
-  margin-top: 10px;
-  .final-price {
-    background-color: rgb(212, 226, 247);
-    border-radius: 5px;
-    margin: 6px;
-    .sous-total {
-      margin-left: 4px;
-    }
-    .total-price {
-      color: red;
-      margin-left: 2px;
-    }
-  }
-  .clear-basket {
-    margin-left: 6px;
-  }
-}
-
 
 </style>
