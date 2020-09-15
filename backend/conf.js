@@ -1,10 +1,14 @@
 require("dotenv").config()
 const mysql = require("mysql")
 
+// Node Server Port and jwtSecret for password encryption
+
 let CONFIG = {
     backendPort: process.env.BACKEND_PORT || "8080",
     jwtSecret: process.env.JWT_SECRET || "jwt_please_change"
 }
+
+// MySQL connection informations
 
 const db = mysql.createPool({
     connectionLimit: 10,
