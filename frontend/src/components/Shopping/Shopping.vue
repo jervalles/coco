@@ -7,7 +7,7 @@
       {{ isAuthed ? 'Logged-in' : 'Not Logged in' }} 
     </div>
     <!-- -->
-
+    
     <v-dialog
       v-model="thanksDialog"
       max-width="320"
@@ -41,11 +41,17 @@
           @selectCategory="selectCategory($event)" 
         />
         <div class="user-menu">
-          <v-btn icon large @click="loginPage()">
+          <v-btn icon x-large @click="loginPage()">
             <v-icon>mdi-account</v-icon>
           </v-btn>
-          <v-btn icon large @click="basket()">
-            <v-icon>mdi-basket</v-icon>
+          <v-btn icon x-large @click="basket()">
+            <div class="basket-icon-container">
+              <v-icon class="basket-icon">mdi-basket</v-icon>
+              <div id="items-count">{{ itemsCountInBasket }}</div>
+            </div>
+          </v-btn>
+          <v-btn v-if="isAdmin" icon x-large @click="admin()">
+            <v-icon>mdi-beaker-check</v-icon>
           </v-btn>
         </div>
         
@@ -82,7 +88,8 @@ export default {
         basketIsEmpty: true,
         loading: true,
         thanksDialog: false,
-        itemsInBasket: []
+        itemsInBasket: [],
+        bouncing: false
       }
     },
      watch: {
@@ -100,8 +107,16 @@ export default {
         'items',
         'categories',
         'itemsFetching',
-        'isAuthed'
-      ])
+        'isAuthed',
+        'isAdmin'
+      ]),
+      itemsCountInBasket() {
+        let count = 0
+        for (let i = 0; i < this.itemsInBasket.length; i++) {
+          count = count + this.itemsInBasket[i].added
+          
+        } return count ? count : null
+      }
     },
     mounted() {
       this.init()
@@ -111,7 +126,18 @@ export default {
         'fetchItemCategories',
         'fetchItems',
         'createOrder'
-		]),
+    ]),
+      bounceEffect() {
+        if (this.bouncing == false) {
+          this.bouncing = true
+          let element = document.getElementById("items-count")
+          element.classList.add("basket-count","bounce")
+          setTimeout(function(){
+            element.classList.remove("bounce", "basket-count")
+            this.bouncing = false
+          }.bind(this),2000)
+        }
+      },
       async init() {
         await this.fetchItemCategories()
         await this.fetchItems()
@@ -127,11 +153,23 @@ export default {
           this.itemsInBasket.push(this.items[index])
         }
         this.totalPrice += this.items[index].price
+        this.bounceEffect()
       },
-      removeItem(event) {
-        if (this.items[event].added > 0) {
-          this.items[event].added -= 1
-          this.totalPrice -= this.items[event].price
+      removeItem(index) {
+        console.log(index)
+        if (this.items[index].added > 0) {
+          if (this.items[index].added === 1) {
+            console.log("condition ok")
+            for (let i = 0; i < this.itemsInBasket.length; i++) { 
+              if ( this.itemsInBasket[i].id === this.items[index].id) { 
+                this.itemsInBasket.splice(i, 1) 
+              }
+            }
+          }
+          this.items[index].added -= 1
+          this.totalPrice -= this.items[index].price
+          
+          
         } else {
           console.log("non autorisé")
         }
@@ -160,6 +198,10 @@ export default {
       },
       basket() {
         this.basketIsOpen = true
+      },
+      admin() {
+        Router.replace({ name: "admin" })
+          .then(() => window.scrollTo(0, 0))
       }
     }
 }
@@ -186,6 +228,45 @@ export default {
         display: flex;
         align-items: center;
         flex-direction: column;
+        .basket-icon-container {
+          position: relative;
+          top: 0;
+          left: 0;
+          .basket-icon {
+            position: relative;
+            top: 0;
+            left: 0;
+          }
+          #items-count {
+            position: absolute;
+            top: 10px;
+            left: 8px;
+            background-color: white;
+            border-radius: 100px;
+          }
+          .basket-count {
+            align-self: flex-end;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            margin: 0 auto 0 auto;
+            transform-origin: bottom;
+            width: 20px;
+          }
+        
+    }
+    .bounce {
+        animation-name: bounce;
+        animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+    }
+    @keyframes bounce {
+        0%   { color: red;transform: scale(1,1)      translateY(-100); }
+        10%  { color: red;transform: scale(1.1,.9)   translateY(-0); }
+        30%  { color: red;transform: scale(.9,1.1)   translateY(-10px); }
+        50%  { color: red;transform: scale(1.05,.95) translateY(0); }
+        57%  { color: red;transform: scale(1,1)      translateY(-50); }
+        64%  { color: red;transform: scale(1,1)      translateY(-4px); }
+        100% { transform: scale(1,1)      translateY(0); }
+    }
       }
     }
   }

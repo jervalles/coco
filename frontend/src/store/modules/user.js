@@ -143,15 +143,14 @@ const getters = {
 	
 	loginUserStatus: state => {
 		return {
-		pending: state.loginUserPending,
-		success: state.loginUserSuccess,
-		error: state.loginUserError
+			pending: state.loginUserPending,
+			success: state.loginUserSuccess,
+			error: state.loginUserError
 		}
 	},
 	
 	// role
-	isAdmin: state => state.role === "administrator", // NOT USED YET
-
+	isAdmin: state => state.user && state.user.role === "administrator",
 	isAuthed: state => state.authed,
 }
 

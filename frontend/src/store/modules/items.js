@@ -42,7 +42,7 @@ const actions = {
         return new Promise((resolve) => {
             commit('FETCH_ITEMS_PENDING')
             fetchItems()
-                .then(timeout(1000)).then(res => {
+                .then(timeout(2000)).then(res => {
                     const items = res.data
                     for (let key in items) {
                         items[key]['added'] = 0
