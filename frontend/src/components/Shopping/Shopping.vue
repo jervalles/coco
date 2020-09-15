@@ -230,6 +230,10 @@ export default {
         flex-direction: column;
         .basket-icon-container {
           position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
           top: 0;
           left: 0;
           .basket-icon {
@@ -239,18 +243,19 @@ export default {
           }
           #items-count {
             position: absolute;
+            width: 22px;
             top: 10px;
-            left: 8px;
+            left: 16px;
             background-color: white;
             border-radius: 100px;
           }
           .basket-count {
-            align-self: flex-end;
+            align-self: center;
             animation-duration: 2s;
             animation-iteration-count: infinite;
             margin: 0 auto 0 auto;
             transform-origin: bottom;
-            width: 20px;
+            width: 22px;
           }
         
     }
