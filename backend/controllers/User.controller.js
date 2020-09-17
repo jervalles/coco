@@ -32,7 +32,7 @@ exports.signupUser = async (req, res, next) => {
 
     try {
 
-        // Check if user with that email exists
+        // Check if user with that provided email exists
         const existingUser = await UserService.getByEmail(email)
 
         if (existingUser) {
@@ -79,7 +79,8 @@ exports.loginUser = (req, res, next) => {
     const password = req.body.password
 
     try {
-        db.query('SELECT user.id, user.email, user.password, role.name as role FROM user LEFT JOIN role ON user.role_id = role.id WHERE email = ?',[email], (err, results) => {
+        db.query('SELECT user.id, user.email, user.password, role.name as role \
+        FROM user LEFT JOIN role ON user.role_id = role.id WHERE email = ?',[email], (err, results) => {
             
             if (err) { 
                 return res.json({
@@ -92,7 +93,7 @@ exports.loginUser = (req, res, next) => {
 
             // if there is no user with that email
             if (!user) {
-                return res.status(401).json({ error: 'User not found' })
+                return res.status(400).json({ error: 'User not found' })
             }
 
             // compare the user password with the input password
