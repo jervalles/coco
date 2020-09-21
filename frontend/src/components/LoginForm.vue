@@ -26,14 +26,12 @@
 			</v-btn>
 			<v-btn
 				text small 
-				class="caption-btn"
 				@click="register()"
 			>
 				Créer un compte
 			</v-btn>
 			<v-btn
 				text small 
-				class="caption-btn"
 			>
 				lost password
 			</v-btn>
@@ -100,10 +98,6 @@ export default {
 			padding: 10px;
 			margin: 20px auto;
 			display: block;
-			}
-			.caption-btn {
-				cursor: pointer;
-				padding: 5px;
 			}
 		}
 	}
