@@ -24,17 +24,19 @@
 			>
 				login
 			</v-btn>
-			<div
+			<v-btn
+				text small 
 				class="caption-btn"
 				@click="register()"
 			>
 				Créer un compte
-			</div>
-			<div
+			</v-btn>
+			<v-btn
+				text small 
 				class="caption-btn"
 			>
 				lost password
-			</div>
+			</v-btn>
 		</v-form>
   </div>
 </template>
