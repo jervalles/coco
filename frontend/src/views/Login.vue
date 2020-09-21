@@ -1,7 +1,7 @@
 <template>
   <div class="account-page">
     <v-container class="account-login">
-			<div class="caption-btn" @click="backHome()">	Retour à la page précedente</div>
+			<v-btn text small class="caption-btn" @click="backHome()">	Retour à la page précedente</v-btn>
 			<v-card class="loginCard">
 				<login-form v-if="!isLoggedin" />
         <div v-else>
