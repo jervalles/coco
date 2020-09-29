@@ -1,43 +1,42 @@
 <template>
   <div class="account-page">
     <v-container class="account-register">
-			<div class="caption-btn" @click="backPreviousPage()">	Retour à la page précedente</div>
-			<v-card class="registerCard">
-				<register-form />
-			</v-card>
+      <div class="caption-btn" @click="backPreviousPage()">
+        Retour à la page précedente
+      </div>
+      <v-card class="registerCard">
+        <register-form />
+      </v-card>
     </v-container>
   </div>
 </template>
 
 <script>
-import RegisterForm from '../components/RegisterForm'
-import Router from '../router'
+import RegisterForm from '../components/RegisterForm.vue'
 
 export default {
   name: 'Register',
   components: {
-      RegisterForm
-	},
-	methods: {
-		backPreviousPage() {
-			Router.push({ name: "login" });
-		}
-	}
+    RegisterForm
+  },
+  methods: {
+    backPreviousPage() {
+      this.$router.push({ name: 'login' })
+    }
+  }
 }
-
 </script>
 
 <style lang="scss">
-
 .account-page {
   height: 100vh;
-	.caption-btn {
-		cursor: pointer;
-		padding: 5px;
-	}
-	.account-register {
-		margin-top: 80px;
-	}
+  .caption-btn {
+    cursor: pointer;
+    padding: 5px;
+  }
+  .account-register {
+    margin-top: 80px;
+  }
   .registerCard {
     width: 100%;
     max-width: 600px;
@@ -48,5 +47,4 @@ export default {
     margin: auto;
   }
 }
-
 </style>

@@ -1,20 +1,17 @@
 <template>
   <div class="banner">
-    <img class="banner-img" src='../images/banner.jpg'/>
-    <img class="logo" src='../images/logo-main.png'/>
+    <img class="banner-img" src="../images/banner.jpg" />
+    <img class="logo" src="../images/logo-main.png" />
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'Banner'
 }
-
 </script>
 
 <style lang="scss">
-
 .banner {
   display: flex;
   justify-content: center;
@@ -31,5 +28,4 @@ export default {
     border-color: wheat;
   }
 }
-
 </style>

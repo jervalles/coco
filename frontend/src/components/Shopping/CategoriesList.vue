@@ -6,9 +6,8 @@
         :key="i"
         @click="selectCategory(i)"
       >
-        <v-list-item-content >
-          <v-list-item-title class="category-text"
-            v-text="item.name">
+        <v-list-item-content>
+          <v-list-item-title class="category-text" v-text="item.name">
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -17,7 +16,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'CategoriesList',
   data() {
@@ -34,16 +32,13 @@ export default {
     }
   }
 }
-
 </script>
 
 <style lang="scss">
-
 #category-list {
   width: 110px;
   .category-text {
     font-size: 11px;
   }
 }
-
 </style>

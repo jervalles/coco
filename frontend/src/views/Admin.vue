@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import OrdersList from '../components/Orders/OrdersList'
+import OrdersList from '../components/Orders/OrdersList.vue'
 
 export default {
   name: 'Admin',
@@ -14,13 +14,10 @@ export default {
     OrdersList
   }
 }
-
 </script>
 
 <style>
-
-  .admin-page {
-    height: 100vh;
-  }
-
+.admin-page {
+  height: 100vh;
+}
 </style>
