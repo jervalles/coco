@@ -1,6 +1,6 @@
 <template>
   <div id="caroussel-container">
-		<v-carousel
+    <v-carousel
       cycle
       height="100%"
       width="100%"
@@ -8,19 +8,18 @@
       show-arrows-on-hover
       hide-delimiters
     >
-      <v-carousel-item
-        v-for="(slide, i) in slides"
-        :key="i"
-        :src="slide.src"
-      >
+      <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide.src">
       </v-carousel-item>
-		</v-carousel>
+    </v-carousel>
   </div>
 </template>
 
 <script>
+import banner1 from '../images/banner1.jpg'
+import banner2 from '../images/banner2.jpg'
+
 export default {
-	name: 'Carousel',
+  name: 'Carousel',
   data() {
     return {
       colors: [
@@ -30,19 +29,16 @@ export default {
         'red lighten-1',
         'deep-purple accent-4'
       ],
-      slides: [
-        { src: require('../images/banner1.jpg')},
-        { src: require('../images/banner2.jpg')}
-      ]
+      slides: [{ src: banner1 }, { src: banner2 }]
     }
   }
 }
 </script>
 
 <style>
-  #caroussel-container {
-    margin-top: 60px;
-    height: 200px;
-    width: 100%;
-  }
+#caroussel-container {
+  margin-top: 60px;
+  height: 200px;
+  width: 100%;
+}
 </style>

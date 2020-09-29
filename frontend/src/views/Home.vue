@@ -7,7 +7,7 @@
 
 <script>
 import Shopping from '../components/Shopping/Shopping.vue'
-import Carousel from '../components/Carousel'
+import Carousel from '../components/Carousel.vue'
 
 export default {
   name: 'Home',
@@ -16,13 +16,10 @@ export default {
     Carousel
   }
 }
-
 </script>
 
 <style>
-
 .home-page {
   height: 100vh;
 }
-
 </style>

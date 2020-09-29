@@ -1,6 +1,10 @@
 import apiInstance from './ApiService'
 
-export const loginService = (email, password) => {
-    console.log("service entered")
-    return apiInstance.post('/api/users/login', {email: email, password: password})
+const loginService = (email, password) => {
+  return apiInstance.post('/api/users/login', {
+    email,
+    password
+  })
 }
+
+export default loginService

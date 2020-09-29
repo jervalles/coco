@@ -1,5 +1,10 @@
 import apiInstance from './ApiService'
 
-export const postUser = (email, password) => {
-    return apiInstance.post('/api/users/signup', {email: email, password: password})
+const postUser = (email, password) => {
+  return apiInstance.post('/api/users/signup', {
+    email,
+    password
+  })
 }
+
+export default postUser

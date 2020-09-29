@@ -6,10 +6,8 @@
       <vcl-facebook :width="300" :height="100" />
       <vcl-facebook :width="300" :height="100" />
     </div>
-    <div v-for="(item, i) in items"
-      :key="i"
-    >
-      <items-card 
+    <div v-for="(item, i) in items" :key="i">
+      <items-card
         v-if="item.category === selectedCategory"
         :item="item"
         :index="i"
@@ -21,8 +19,8 @@
 </template>
 
 <script>
-import {VclFacebook} from 'vue-content-loading'
-import ItemsCard from './ItemsCard'
+import { VclFacebook } from 'vue-content-loading'
+import ItemsCard from './ItemsCard.vue'
 
 export default {
   name: 'ItemsList',
@@ -49,22 +47,19 @@ export default {
     }
   }
 }
-
 </script>
 
 <style lang="scss">
-
-  .items-list {
-    background-color:rgb(240, 240, 240);
-    border-radius: 2px;
-    width: calc(100% - 114px);
-    display: flex;
-    flex-direction: column;
-    height: 460px;
-    overflow: auto;
-    #loading {
-      align-self: center;
-    }
+.items-list {
+  background-color: rgb(240, 240, 240);
+  border-radius: 2px;
+  width: calc(100% - 114px);
+  display: flex;
+  flex-direction: column;
+  height: 460px;
+  overflow: auto;
+  #loading {
+    align-self: center;
   }
-
+}
 </style>

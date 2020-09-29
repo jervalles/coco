@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons"
+      rel="stylesheet"
+    />
     <v-app>
       <div id="main">
         <banner />
@@ -14,19 +17,17 @@
 </template>
 
 <script>
-import Banner from './components/Banner'
+import Banner from './components/Banner.vue'
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Banner
   }
 }
-
 </script>
 
 <style lang="scss">
-
 @media only screen and (min-width: 600px) {
   #main {
     display: none;
@@ -34,10 +35,8 @@ export default {
 }
 
 @media only screen and (max-width: 600px) {
-
   #desktop {
     display: none;
   }
 }
-
 </style>
