@@ -1,8 +1,10 @@
 <template>
   <div class="register-form">
-    <v-form @submit.prevent>
+    <v-form @submit.prevent v-model="isValid">
       <v-text-field
         v-model="email"
+        :rules="emailRules"
+        error-count="2"
         class="input"
         type="email"
         name="login-email"
@@ -11,7 +13,9 @@
       />
       <v-text-field
         v-model="password"
+        :rules="passwordRules"
         class="input"
+        error-count="5"
         name="login-password"
         autocomplete="new-password"
         :append-icon="showPwd ? 'visibility' : 'visibility_off'"
@@ -23,6 +27,7 @@
         color="primary"
         class="btn-log"
         :loading="creationLoading"
+        :disabled="!isValid"
         @click="submitRegister()"
       >
         Créer un compte
@@ -43,7 +48,19 @@ export default {
       email: '',
       password: '',
       statusMessage: '',
-      creationLoading: false
+      creationLoading: false,
+      emailRules: [
+        v => !!v || 'Email is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v => (v && v.length >= 5) || 'Password must have 5+ characters',
+        v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character',
+        v => /(?=.*\d)/.test(v) || 'Must have one number',
+        v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
+      ],
+      isValid: false
     }
   },
   computed: {
