@@ -1,8 +1,9 @@
 <template>
   <div class="login-form">
-    <v-form @submit.prevent>
+    <v-form @submit.prevent v-model="isValid">
       <v-text-field
         v-model="email"
+        :rules="emailRules"
         autocomplete="current-email"
         class="input"
         type="email"
@@ -23,6 +24,7 @@
         color="primary"
         class="btn-log"
         @click="submitLogin()"
+        :disabled="!isValid"
         :loading="loginLoading"
       >
         login
@@ -44,7 +46,12 @@ export default {
       showPwd: false,
       email: '',
       password: '',
-      loginLoading: false
+      loginLoading: false,
+      emailRules: [
+        v => !!v || 'Email is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
+      isValid: false
     }
   },
   computed: {
