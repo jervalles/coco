@@ -61,7 +61,6 @@ exports.fetchOrders = (req, res) => {
                     res.status(500).send("Erreur lors de la récupération des données")
                 } else {
                     const orders = groupBy("orderId", results)
-                    console.log(orders)
                     res.status(200).json(orders)
                 }
             }
