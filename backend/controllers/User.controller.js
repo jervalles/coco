@@ -1,3 +1,17 @@
+const validator = require("email-validator")
+const passwordValidator = require('password-validator')
+
+const schema = new passwordValidator()
+schema
+    .is().min(5)                                    // Minimum length 8
+    .is().max(100)                                  // Maximum length 100
+    .has().uppercase()                              // Must have uppercase letters
+    .has().lowercase()                              // Must have lowercase letters
+    .has().digits(1)                                // Must have at least 2 digits
+    .has().not().spaces()                           // Should not have spaces
+    .is().not().oneOf(['Passw0rd', 'Password123']) // Blacklist these values
+    .has().symbols(1)
+
 /**
  * @controller UserController
  * @description Handling users requests
@@ -32,11 +46,25 @@ exports.signupUser = async (req, res, next) => {
 
     try {
 
+        // Check if the email format is valid
+        const validEmail = validator.validate(email)
+
+        if (!validEmail) {
+            return res.status(401).json('Email format not valid')
+        }
+
         // Check if user with that provided email exists
         const existingUser = await UserService.getByEmail(email)
 
         if (existingUser) {
             return res.status(409).json('User with this email already exists')
+        }
+
+        // Check if the password has the minimum configuration
+        const validPassword = schema.validate(password)
+
+        if (!validPassword) {
+            return res.status(401).json('Password is not safe')
         }
         
         bcrypt.hash(password, 10, (err, hash) => {
@@ -79,6 +107,14 @@ exports.loginUser = (req, res, next) => {
     const password = req.body.password
 
     try {
+
+        // Check if the email format is valid
+        const validEmail = validator.validate(email)
+
+        if (!validEmail) {
+            return res.status(409).json('Email format not valid')
+        }
+
         db.query('SELECT user.id, user.email, user.password, role.name as role \
         FROM user LEFT JOIN role ON user.role_id = role.id WHERE email = ?',[email], (err, results) => {
             
