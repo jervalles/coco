@@ -32,6 +32,7 @@
       >
         Créer un compte
       </v-btn>
+      <v-btn text small @click="toLoginPage()"> Déjà un compte ? </v-btn>
     </v-form>
     <span class="status-message" v-if="statusMessage">{{ statusMessage }}</span>
   </div>
@@ -50,30 +51,33 @@ export default {
       statusMessage: '',
       creationLoading: false,
       emailRules: [
-        v => !!v || 'Email is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
+        (v) => !!v || 'Email is required',
+        (v) => /.+@.+/.test(v) || 'E-mail must be valid',
       ],
       passwordRules: [
-        v => !!v || 'Password is required',
-        v => (v && v.length >= 5) || 'Password must have 5+ characters',
-        v => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character',
-        v => /(?=.*\d)/.test(v) || 'Must have one number',
-        v => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]'
+        (v) => !!v || 'Password is required',
+        (v) => (v && v.length >= 5) || 'Password must have 5+ characters',
+        (v) => /(?=.*[A-Z])/.test(v) || 'Must have one uppercase character',
+        (v) => /(?=.*\d)/.test(v) || 'Must have one number',
+        (v) => /([!@$%])/.test(v) || 'Must have one special character [!@#$%]',
       ],
-      isValid: false
+      isValid: false,
     }
   },
   computed: {
-    ...mapGetters(['createUserStatus'])
+    ...mapGetters(['createUserStatus']),
   },
   methods: {
     ...mapActions(['createUser']),
     async submitRegister() {
       await this.createUser({
         email: this.email,
-        password: this.password
+        password: this.password,
       })
-    }
+    },
+    toLoginPage() {
+      this.$router.push({ name: 'login' })
+    },
   },
   watch: {
     createUserStatus(status) {
@@ -85,8 +89,8 @@ export default {
         this.statusMessage = 'Un problème est survenu'
         this.creationLoading = false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

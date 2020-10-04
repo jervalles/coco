@@ -24,11 +24,11 @@ import LoginForm from '../components/LoginForm.vue'
 export default {
   name: 'Login',
   components: {
-    LoginForm
+    LoginForm,
   },
   data() {
     return {
-      isLoggedin: false
+      isLoggedin: false,
     }
   },
 
@@ -40,7 +40,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user']),
   },
 
   methods: {
@@ -51,8 +51,8 @@ export default {
     async submitLogout() {
       await this.logoutUser()
       this.$router.push({ name: 'register' })
-    }
-  }
+    },
+  },
 }
 </script>
 

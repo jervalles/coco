@@ -1,9 +1,9 @@
 <template>
   <div class="account-page">
     <v-container class="account-register">
-      <div class="caption-btn" @click="backPreviousPage()">
-        Retour à la page précedente
-      </div>
+      <v-btn text small class="caption-btn" @click="backHome()">
+        Retour à la page précedente</v-btn
+      >
       <v-card class="registerCard">
         <register-form />
       </v-card>
@@ -17,13 +17,13 @@ import RegisterForm from '../components/RegisterForm.vue'
 export default {
   name: 'Register',
   components: {
-    RegisterForm
+    RegisterForm,
   },
   methods: {
-    backPreviousPage() {
-      this.$router.push({ name: 'login' })
-    }
-  }
+    backHome() {
+      this.$router.push({ name: 'home' })
+    },
+  },
 }
 </script>
 
