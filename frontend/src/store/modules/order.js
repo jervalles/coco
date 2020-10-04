@@ -2,7 +2,7 @@
 import {
   fetchOrders,
   postOrder,
-  destroyOrder
+  toArchiveOrder
 } from '../../services/OrderService'
 
 const state = {
@@ -24,9 +24,9 @@ const state = {
   createOrderError: false,
 
   // DELETE ORDERS STATUS
-  deleteOrderPending: false,
-  deleteOrderSuccess: false,
-  deleteOrderError: false
+  archiveOrderPending: false,
+  archiveOrderSuccess: false,
+  archiveOrderError: false
 }
 
 const mutations = {
@@ -66,20 +66,20 @@ const mutations = {
   },
 
   // delete order
-  DELETE_ORDER_SUCCESS(state) {
-    state.deleteOrderSuccess = true
-    state.deleteOrderPending = false
-    state.deleteOrderError = false
+  ARCHIVE_ORDER_SUCCESS(state) {
+    state.archiveOrderSuccess = true
+    state.archiveOrderPending = false
+    state.archiveOrderError = false
   },
-  DELETE_ORDER_PENDING(state) {
-    state.deleteOrderSuccess = false
-    state.deleteOrderPending = true
-    state.deleteOrderError = false
+  ARCHIVE_ORDER_PENDING(state) {
+    state.archiveOrderSuccess = false
+    state.archiveOrderPending = true
+    state.archiveOrderError = false
   },
-  DELETE_ORDER_ERROR(state) {
-    state.deleteOrderSuccess = false
-    state.deleteOrderPending = false
-    state.deleteOrderError = true
+  ARCHIVE_ORDER_ERROR(state) {
+    state.archiveOrderSuccess = false
+    state.archiveOrderPending = false
+    state.archiveOrderError = true
   }
 }
 
@@ -119,16 +119,17 @@ const actions = {
       })
   },
 
-  deleteOrder({ commit }, payload) {
-    commit('DELETE_ORDER_PENDING')
-    destroyOrder(payload)
-      .then(() => {
-        commit('DELETE_ORDER_SUCCESS')
-      })
-      .catch(err => {
-        console.log(err)
-        commit('DELETE_ORDER_ERROR')
-      })
+  archiveOrder({ commit }, payload) {
+    commit('ARCHIVE_ORDER_PENDING')
+    setTimeout(() => toArchiveOrder(payload).then(() => {
+      commit('ARCHIVE_ORDER_SUCCESS')
+    })
+    .catch(err => {
+      console.log(err)
+      commit('ARCHIVE_ORDER_ERROR')
+    }), 2000)
+    
+      
   }
 }
 
@@ -150,11 +151,11 @@ const getters = {
       error: state.createOrderError
     }
   },
-  deleteOrderStatus(state) {
+  archiveOrderStatus(state) {
     return {
-      pending: state.deleteOrderPending,
-      success: state.deleteOrderSuccess,
-      error: state.deleteOrderError
+      pending: state.archiveOrderPending,
+      success: state.archiveOrderSuccess,
+      error: state.archiveOrderError
     }
   }
 }

@@ -74,7 +74,7 @@ export default {
   components: {
     CategoryList,
     ItemsList,
-    CartModal
+    CartModal,
   },
   data() {
     return {
@@ -85,7 +85,7 @@ export default {
       loading: true,
       thanksDialog: false,
       itemsInBasket: [],
-      bouncing: false
+      bouncing: false,
     }
   },
   watch: {
@@ -95,7 +95,7 @@ export default {
       } else if (status.error) {
         // console.log("NOT OK")
       }
-    }
+    },
   },
   computed: {
     ...mapGetters([
@@ -104,7 +104,7 @@ export default {
       'categories',
       'itemsFetching',
       'isAuthed',
-      'isAdmin'
+      'isAdmin',
     ]),
     itemsCountInBasket() {
       let count = 0
@@ -112,7 +112,7 @@ export default {
         count += this.itemsInBasket[i].added
       }
       return count || null
-    }
+    },
   },
   mounted() {
     this.init()
@@ -125,7 +125,7 @@ export default {
         const element = document.getElementById('items-count')
         element.classList.add('basket-count', 'bounce')
         setTimeout(
-          function() {
+          function () {
             element.classList.remove('bounce', 'basket-count')
             this.bouncing = false
           }.bind(this),
@@ -182,7 +182,7 @@ export default {
       this.basketIsOpen = false
       this.thanksDialog = true
       setTimeout(
-        function() {
+        function () {
           this.thanksDialog = false
         }.bind(this),
         5000
@@ -196,8 +196,8 @@ export default {
     },
     admin() {
       Router.replace({ name: 'admin' }).then(() => window.scrollTo(0, 0))
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -239,7 +239,7 @@ export default {
             width: 22px;
             top: 10px;
             left: 16px;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.75);
             border-radius: 100px;
           }
           .basket-count {

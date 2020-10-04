@@ -21,6 +21,7 @@
         @click:append="showPwd = !showPwd"
       />
       <v-btn
+        type="submit"
         color="primary"
         class="btn-log"
         @click="submitLogin()"
@@ -48,14 +49,14 @@ export default {
       password: '',
       loginLoading: false,
       emailRules: [
-        v => !!v || 'Email is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
+        (v) => !!v || 'Email is required',
+        (v) => /.+@.+/.test(v) || 'E-mail must be valid',
       ],
-      isValid: false
+      isValid: false,
     }
   },
   computed: {
-    ...mapGetters(['loginUserStatus'])
+    ...mapGetters(['loginUserStatus']),
   },
   methods: {
     ...mapActions(['loginUser']),
@@ -65,9 +66,9 @@ export default {
     async submitLogin() {
       await this.loginUser({
         email: this.email,
-        password: this.password
+        password: this.password,
       })
-    }
+    },
   },
   watch: {
     loginUserStatus(status) {
@@ -82,8 +83,8 @@ export default {
         // this.statusMessage = 'Un problème est survenu'
         this.loginLoading = false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

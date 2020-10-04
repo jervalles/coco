@@ -8,6 +8,6 @@ export const postOrder = orders => {
   return apiInstance.post('/api/orders', orders)
 }
 
-export const destroyOrder = orderId => {
-  return apiInstance.delete(`/api/orders/${orderId}`)
+export const toArchiveOrder = orderId => {
+  return apiInstance.put(`/api/orders/${orderId}`)
 }
