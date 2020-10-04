@@ -10,7 +10,7 @@ router.get("/", auth, ordersController.fetchOrders)
 // ORDERS CREATE || POST (NEED AUTH)
 router.post("/", auth, ordersController.create)
 
-// ORDER DELETE || DELETE (NEED AUTH)
-router.delete("/:id", auth, ordersController.delete)
+// ORDER ARCHIVE || UPDATE (NEED AUTH)
+router.put("/:id", auth, ordersController.archive)
 
 module.exports = router

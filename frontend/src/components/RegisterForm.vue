@@ -24,6 +24,7 @@
         @click:append="showPwd = !showPwd"
       />
       <v-btn
+        type="submit"
         color="primary"
         class="btn-log"
         :loading="creationLoading"

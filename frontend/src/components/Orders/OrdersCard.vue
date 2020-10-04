@@ -9,7 +9,7 @@
       {{ item.itemName }}:
       <span class="item-quantity">{{ item.quantity }}</span>
     </div>
-    <v-btn @click="removeOrder()" small color="success" class="order-delete"
+    <v-btn @click="openDialog()" small color="success" class="order-delete"
       >RECEPTION FAITE</v-btn
     >
   </div>
@@ -21,19 +21,22 @@ export default {
   components: {},
   data() {
     return {
-      chip1: true
+      chip1: true,
     }
   },
   props: {
     order: Object,
-    index: Number
+    index: Number,
   },
   computer: {},
   methods: {
-    removeOrder() {
-      this.$emit('delete-order')
-    }
-  }
+    openDialog() {
+      this.$emit('open-dialog', {
+        index: this.index,
+        orderId: this.order.orderId,
+      })
+    },
+  },
 }
 </script>
 
