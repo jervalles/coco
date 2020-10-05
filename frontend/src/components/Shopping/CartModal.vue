@@ -48,9 +48,8 @@
           </div>
           <div v-for="(item, i) in this.itemsInBasket" :key="i">
             <items-card
-              v-if="item.added > 0"
               :item="item"
-              :index="i"
+              :index="itemsInBasket[i].index"
               @addItem="addItem($event)"
               @removeItem="removeItem($event)"
             />
@@ -85,20 +84,20 @@ import ItemsCard from './ItemsCard.vue'
 export default {
   name: 'CartModal',
   components: {
-    ItemsCard
+    ItemsCard,
   },
   data() {
     return {
       errorOrderBdd: false,
       emptyBasketAlert: false,
-      orderDialogAsk: false
+      orderDialogAsk: false,
     }
   },
   props: {
     basketIsOpen: Boolean,
     itemsInBasket: Array,
     totalPrice: Number,
-    basketIsEmpty: Boolean
+    basketIsEmpty: Boolean,
   },
   watch: {
     createOrderStatus(status) {
@@ -107,7 +106,7 @@ export default {
       } else if (status.success) {
         this.orderSucess()
       }
-    }
+    },
   },
   computed: {
     ...mapGetters(['createOrderStatus']),
@@ -120,7 +119,7 @@ export default {
         }
       }
       return 'Votre panier est vide'
-    }
+    },
   },
   methods: {
     closeBasket() {
@@ -152,8 +151,8 @@ export default {
     orderSucess() {
       this.orderDialogAsk = false
       this.$emit('order-success')
-    }
-  }
+    },
+  },
 }
 </script>
 
