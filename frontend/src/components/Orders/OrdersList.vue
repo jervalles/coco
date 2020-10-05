@@ -35,6 +35,7 @@ export default {
       dialog: false,
       archiveInfos: {},
       archeving: false,
+      intervalOrdersFetch: '',
     }
   },
   computed: {
@@ -42,6 +43,9 @@ export default {
   },
   mounted() {
     this.init()
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalOrdersFetch)
   },
   watch: {
     archiveOrderStatus(status) {
@@ -59,9 +63,9 @@ export default {
     ...mapActions(['fetchOrders', 'archiveOrder']),
     async init() {
       await this.fetchOrders()
-      await setInterval(() => {
+      this.intervalOrdersFetch = setInterval(() => {
         this.fetchOrders()
-      }, 10000)
+      }, 60000)
     },
     async removeOrder() {
       this.archeving = true
