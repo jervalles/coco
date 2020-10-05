@@ -145,13 +145,14 @@ export default {
         this.items[index].added += 1
       } else {
         this.items[index].added += 1
-        this.itemsInBasket.push(this.items[index])
+        let newItem = this.items[index]
+        newItem.index = index
+        this.itemsInBasket.push(newItem)
       }
       this.totalPrice += this.items[index].price
       this.bounceEffect()
     },
     removeItem(index) {
-      console.log(index)
       if (this.items[index].added > 0) {
         if (this.items[index].added === 1) {
           console.log('condition ok')

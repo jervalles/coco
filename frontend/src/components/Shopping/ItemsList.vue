@@ -26,17 +26,17 @@ export default {
   name: 'ItemsList',
   components: {
     ItemsCard,
-    VclFacebook
+    VclFacebook,
   },
   data() {
     return {
-      selectedItem: []
+      selectedItem: [],
     }
   },
   props: {
     items: Array,
     selectedCategory: Number,
-    loading: Boolean
+    loading: Boolean,
   },
   methods: {
     addItem(i) {
@@ -44,8 +44,8 @@ export default {
     },
     removeItem(i) {
       this.$emit('removeItem', i)
-    }
-  }
+    },
+  },
 }
 </script>
 

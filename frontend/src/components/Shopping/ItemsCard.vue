@@ -28,9 +28,7 @@
       />
     </div>
     <div class="item-details">
-      <span class="item-title">
-        {{ itemName }}
-      </span>
+      <span class="item-title"> {{ itemName }} </span>
       <p>
         {{ item.description }}
       </p>
@@ -67,29 +65,29 @@
 
 <script>
 export default {
-  name: "ItemsCard",
+  name: 'ItemsCard',
   data() {
     return {
-      descriptionModal: false
+      descriptionModal: false,
     }
   },
   props: {
     item: Object,
-    index: Number
+    index: Number,
   },
   methods: {
     addItem() {
-      this.$emit("addItem", this.index)
+      this.$emit('addItem', this.index)
     },
     removeItem() {
-      this.$emit("removeItem", this.index)
-    }
+      this.$emit('removeItem', this.index)
+    },
   },
   computed: {
     itemName() {
       return this.item.name.toUpperCase()
-    }
-  }
+    },
+  },
 }
 </script>
 
